@@ -1,0 +1,22 @@
+{
+  "poll_interval_seconds": 10,
+  "order_fill_timeout_seconds": 60,
+  "sl_market_chase_delay_seconds": 20,
+  "default_limit_buffer_pct": 0.5,
+  "max_log_lines": 500,
+  "eod_square_off_time": "15:15",
+  "default_nfo_lot_size": 65,
+  "max_trade_duration_hours": 2.0,
+  "loss_exit_time_hours": 1.0,
+  "loss_exit_percent": 2.0,
+  "state_file_path": "D:\\openalgo\\strategies\\TradeControlAlgoToolKit\\journal_active_state.json",
+  "execution_log_path": "D:\\openalgo\\strategies\\TradeControlAlgoToolKit\\trade_executions_journal.csv",
+  "openalgo_api_key": "YOUR_OPEN_ALGO_API_KEY",
+  "openalgo_host": "http://127.0.0.1:5000",
+  "openalgo_ws_url": "ws://127.0.0.1:8765",
+  "zmq_host": "127.0.0.1",
+  "zmq_port": 5555,
+  "symbol_db_path": "D:/openalgo/db/openalgo.db",
+  "stale_data_alert_delay": 20,
+  "zmq_address": "127.0.0.1:5555"
+}

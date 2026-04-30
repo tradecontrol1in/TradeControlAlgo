@@ -1,0 +1,3378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeControl.in Algo Toolkit</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b73717bba1.js" crossorigin="anonymous"></script>
+    <style>
+        /* ══════════════════════════════════════════════════════════
+           DARK THEME (Default)
+           ══════════════════════════════════════════════════════════ */
+        :root,
+        [data-theme="dark"] {
+            --bg-base: #0a0e17;
+            --bg-surface: #121826;
+            --bg-elevated: #1a2235;
+            --bg-inset: #0d1220;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.35);
+            --primary-subtle: rgba(59, 130, 246, 0.10);
+            --secondary: #10b981;
+            --secondary-subtle: rgba(16, 185, 129, 0.12);
+            --danger: #ef4444;
+            --danger-subtle: rgba(239, 68, 68, 0.12);
+            --warning: #f59e0b;
+            --warning-subtle: rgba(245, 158, 11, 0.12);
+            --text-main: #f3f4f6;
+            --text-heading: #ffffff;
+            --text-muted: #9ca3af;
+            --text-faint: #6b7280;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --border-strong: rgba(255, 255, 255, 0.12);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+            --scrollbar-track: #0d1220;
+            --scrollbar-thumb: #2a3346;
+            --scrollbar-thumb-hover: #3d4f6a;
+            --sidebar-active-bg: rgba(59, 130, 246, 0.10);
+            --row-hover: rgba(255, 255, 255, 0.025);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-base: 0.2s ease;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           LIGHT THEME
+           ══════════════════════════════════════════════════════════ */
+        [data-theme="light"] {
+            --bg-base: #f0f2f5;
+            --bg-surface: #ffffff;
+            --bg-elevated: #f8f9fb;
+            --bg-inset: #e8ecf1;
+            --primary: #2563eb;
+            --primary-glow: rgba(37, 99, 235, 0.25);
+            --primary-subtle: rgba(37, 99, 235, 0.08);
+            --secondary: #059669;
+            --secondary-subtle: rgba(5, 150, 105, 0.10);
+            --danger: #dc2626;
+            --danger-subtle: rgba(220, 38, 38, 0.08);
+            --warning: #d97706;
+            --warning-subtle: rgba(217, 119, 6, 0.10);
+            --text-main: #1e293b;
+            --text-heading: #0f172a;
+            --text-muted: #64748b;
+            --text-faint: #94a3b8;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.15);
+            --border-strong: rgba(0, 0, 0, 0.12);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.10), 0 4px 8px rgba(0, 0, 0, 0.06);
+            --scrollbar-track: #e8ecf1;
+            --scrollbar-thumb: #c4cdd8;
+            --scrollbar-thumb-hover: #a0aec0;
+            --sidebar-active-bg: rgba(37, 99, 235, 0.08);
+            --row-hover: rgba(0, 0, 0, 0.02);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           GLOBAL RESETS & BASE
+           ══════════════════════════════════════════════════════════ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.35s ease, color 0.35s ease;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           CUSTOM SCROLLBARS
+           ══════════════════════════════════════════════════════════ */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+            border: 2px solid var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: var(--scrollbar-track);
+        }
+
+        /* Firefox scrollbars */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           SIDEBAR
+           ══════════════════════════════════════════════════════════ */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: background-color 0.35s ease, border-color 0.35s ease;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            padding: 0 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+        }
+
+        .nav-item {
+            padding: 11px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            border-left: 3px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background-color: var(--sidebar-active-bg);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background-color: var(--sidebar-active-bg);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-section {
+            padding: 8px 24px 10px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            color: var(--text-faint);
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            padding: 12px 24px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-subtle);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .theme-toggle i {
+            font-size: 1rem;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .theme-toggle:hover i {
+            transform: rotate(30deg) scale(1.15);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           HEADER & TOP TABS
+           ══════════════════════════════════════════════════════════ */
+        .header-tabs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-tab {
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .header-tab:hover {
+            color: var(--text-main);
+            background: var(--border-hover);
+            border-color: var(--border-hover);
+        }
+
+        .header-tab.active {
+            color: var(--primary);
+            background: var(--primary-subtle);
+            border-color: var(--primary);
+        }
+
+        .header-tab i {
+            font-size: 0.78rem;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           MAIN CONTENT AREA
+           ══════════════════════════════════════════════════════════ */
+        .main-content {
+            flex: 1;
+            padding: 32px 48px 80px;
+            overflow-y: auto;
+            height: 100vh;
+            transition: background-color 0.35s ease;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .pill-status {
+            background-color: var(--secondary-subtle);
+            color: var(--secondary);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+
+        .pill-status .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--secondary);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           TABS & ANIMATIONS
+           ══════════════════════════════════════════════════════════ */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           CARDS
+           ══════════════════════════════════════════════════════════ */
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+            transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-header p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           FORMS
+           ══════════════════════════════════════════════════════════ */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.01em;
+        }
+
+        .form-control {
+            background-color: var(--bg-elevated);
+            border: 1px solid var(--border-strong);
+            color: var(--text-main);
+            padding: 11px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.92rem;
+            font-family: inherit;
+            transition: all var(--transition-base);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-faint);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           AUTOCOMPLETE
+           ══════════════════════════════════════════════════════════ */
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid var(--border-strong);
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-surface);
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            max-height: 240px;
+            overflow-y: auto;
+            box-shadow: var(--shadow-md);
+        }
+
+        .autocomplete-items div {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            font-size: 0.88rem;
+            transition: background-color 0.12s ease;
+        }
+
+        .autocomplete-items div:hover {
+            background-color: var(--primary-subtle);
+        }
+
+        .autocomplete-items div:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-active {
+            background-color: var(--primary) !important;
+            color: #ffffff !important;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           BUTTONS
+           ══════════════════════════════════════════════════════════ */
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 0.92rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px var(--primary-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px var(--primary-glow);
+            filter: brightness(1.08);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-hover);
+            color: var(--text-main);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--row-hover);
+            border-color: var(--border-strong);
+            box-shadow: none;
+            filter: none;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           TABLES
+           ══════════════════════════════════════════════════════════ */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 0 -4px;
+            padding: 0 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            background: var(--bg-surface);
+            z-index: 2;
+        }
+
+        td {
+            font-size: 0.88rem;
+            color: var(--text-main);
+        }
+
+        tr {
+            transition: background-color 0.15s ease;
+        }
+
+        tr:hover td {
+            background-color: var(--row-hover);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           BADGES
+           ══════════════════════════════════════════════════════════ */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge.pending {
+            color: var(--warning);
+            background-color: var(--warning-subtle);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .badge.running {
+            color: var(--primary);
+            background-color: var(--primary-subtle);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        .badge.completed {
+            color: var(--secondary);
+            background-color: var(--secondary-subtle);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           TOAST NOTIFICATIONS
+           ══════════════════════════════════════════════════════════ */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 3000;
+        }
+
+        .toast {
+            background-color: var(--bg-surface);
+            border-left: 4px solid var(--primary);
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            max-width: 400px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           MODAL
+           ══════════════════════════════════════════════════════════ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--bg-surface);
+            padding: 28px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-strong);
+            width: 380px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.2s ease;
+            color: var(--text-main);
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           LIGHT THEME OVERRIDES — Non-variable specifics
+           ══════════════════════════════════════════════════════════ */
+        [data-theme="light"] .sidebar {
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .card {
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .form-control {
+            background-color: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        [data-theme="light"] .form-control:focus {
+            background-color: #ffffff;
+        }
+
+        [data-theme="light"] .btn-outline {
+            border-color: #d1d5db;
+        }
+
+        [data-theme="light"] .btn-outline:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        [data-theme="light"] .toast {
+            background: #ffffff;
+            border-color: #e2e8f0;
+        }
+
+        [data-theme="light"] .autocomplete-items {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        [data-theme="light"] .autocomplete-items div:hover {
+            background-color: #eff6ff;
+        }
+
+        [data-theme="light"] th {
+            background: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Raw Square Off Modal -->
+    <div id="squareOffModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="font-size:1.2rem; margin-bottom:12px; margin-top:0;">Raw Square Off <span id="soSym"
+                    style="color:var(--primary)"></span></h2>
+            <p style="margin-bottom:16px; color:var(--text-muted); font-size:0.9rem;">
+                Live LTP: <span id="soLtp" style="color:var(--secondary); font-weight:bold;">₹0.00</span>
+            </p>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label>Exit Quantity</label>
+                <input type="number" id="soQty" class="form-control" placeholder="Qty">
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label>Limit Price (0 = MARKET)</label>
+                <input type="number" step="0.05" id="soPx" class="form-control" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+                <button class="btn btn-outline" style="border-color:var(--border)"
+                    onclick="document.getElementById('squareOffModalOverlay').style.display='none'">Cancel</button>
+                <button class="btn btn-outline" style="border-color:var(--warning);color:var(--warning)"
+                    onclick="confirmSquareOffModal()"><i class="fa-solid fa-fire"></i> Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fa-solid fa-chart-line"></i>
+                TradeControl.in Algo Toolkit
+            </div>
+            <a href="https://tradecontrol.in" target="_blank" style="font-size: 0.95rem; background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 700; margin-left: 38px; letter-spacing: 0.5px; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">tradecontrol.in</a>
+        </div>
+        <div class="sidebar-section">Strategy Design</div>
+        <a class="nav-item active" onclick="switchTab('basic-long', this)">
+            <i class="fa-solid fa-arrow-up-right-dots"></i> Basic Long
+        </a>
+        <a class="nav-item" onclick="switchTab('short-mis', this)">
+            <i class="fa-solid fa-arrow-down-short-wide"></i> Short MIS
+        </a>
+        <a class="nav-item" onclick="switchTab('vwap-long', this)">
+            <i class="fa-solid fa-arrow-trend-up"></i> VWAP Long
+        </a>
+        <a class="nav-item" onclick="switchTab('vwap-short', this)">
+            <i class="fa-solid fa-arrow-trend-down"></i> VWAP Short
+        </a>
+        <a class="nav-item" onclick="switchTab('bracket-acc', this)">
+            <i class="fa-solid fa-layer-group"></i> Bracket Accumulate
+        </a>
+        <div class="sidebar-section" style="margin-top:16px;">Monitoring</div>
+        <a class="nav-item" onclick="switchTab('alerts', this)">
+            <i class="fa-solid fa-bell"></i> Alerts <span id="alertsBadgeCount"
+                style="background:var(--danger);color:#fff;border-radius:999px;padding:1px 7px;font-size:0.7rem;margin-left:auto;display:none;">0</span>
+        </a>
+        <div style="flex:1;"></div>
+        <a class="nav-item" onclick="switchTab('settings', this)">
+            <i class="fa-solid fa-gear"></i> Settings
+        </a>
+        <a class="nav-item" onclick="switchTab('debug-ws', this)">
+            <i class="fa-solid fa-bug"></i> Debug WS
+        </a>
+        <div class="sidebar-footer">
+            <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+                <span id="themeLabel">Light Mode</span>
+            </button>
+        </div>
+        <!-- Floating Alert Notifications -->
+        <div id="sidebarAlertNotifs"
+            style="position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1 id="page-title">Trade Design</h1>
+            <div class="header-tabs">
+                <a class="header-tab" onclick="switchTab('books', this)">
+                    <i class="fa-solid fa-book-open"></i> Positions
+                </a>
+                <a class="header-tab" onclick="switchTab('trade-log', this)">
+                    <i class="fa-solid fa-terminal"></i> Trade Log
+                </a>
+                <a class="header-tab" onclick="switchTab('trade-manager', this)">
+                    <i class="fa-solid fa-list-check"></i> Manager
+                </a>
+                <div class="pill-status" id="botStatusPill">
+                    <div class="dot" id="botStatusDot"></div>
+                    <span id="botStatusText">Checking...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Basic Long Tab -->
+        <div id="basic-long" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Design Basic Long Algo</h2>
+                    <p>Enter the simple trade design for a standard long algorithm.</p>
+                </div>
+                <form id="form-basic-long" onsubmit="submitTrade(event, 'BASIC_LONG')">
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group" style="position: relative;">
+                            <label>Symbol</label>
+                            <input type="text" class="form-control" name="symbol" id="symp_basic" required
+                                placeholder="e.g. RELIANCE" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Buy Level (Price)</label>
+                            <input type="number" step="0.05" class="form-control" name="buy_level" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Buy Trigger Direction</label>
+                            <select class="form-control" name="buy_trigger_dir">
+                                <option value="none" selected>None (Immediate at level)</option>
+                                <option value="below">From Above (price drops to level)</option>
+                                <option value="above">From Below (price rises to level)</option>
+                            </select>
+                            <small style="color:var(--text-muted);font-size:0.7rem;">None = buy at level or market if
+                                below</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" class="form-control" name="qty" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Target Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Stop Loss Trigger</label>
+                            <input type="number" step="0.05" class="form-control" name="stop_loss" required>
+                        </div>
+                        <div class="form-group">
+                            <label>SL Exit Price (Limit)</label>
+                            <input type="number" step="0.05" class="form-control" name="sl_exit_price"
+                                placeholder="Same as SL trigger if empty">
+                            <small style="color:var(--text-muted);font-size:0.7rem;">Limit price for SL order (≤ trigger
+                                for Long)</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Exchange</label>
+                            <select class="form-control" name="exchange">
+                                <option value="NSE" selected>NSE</option>
+                                <option value="NFO">NFO (Options)</option>
+                                <option value="BFO">BFO</option>
+                                <option value="MCX">MCX</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type</label>
+                            <select class="form-control" name="product">
+                                <option value="CNC" selected>CNC (Delivery)</option>
+                                <option value="MIS">MIS (Intraday)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-grid"
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(255, 255, 255, 0.03); border-radius: 8px;">
+                        <div class="form-group">
+                            <label>Auto Cancel (If not filled by)</label>
+                            <input type="datetime-local" class="form-control" name="cancel_by">
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 8px;">
+                            <div style="flex: 1;">
+                                <label>Hold Time Max</label>
+                                <input type="number" step="0.1" class="form-control" name="hold_val"
+                                    placeholder="Auto square-off">
+                            </div>
+                            <div style="flex: 1;">
+                                <label>&nbsp;</label>
+                                <select class="form-control" name="hold_unit">
+                                    <option value="m">Mins</option>
+                                    <option value="h">Hours</option>
+                                    <option value="d">Days</option>
+                                    <option value="w">Weeks</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Time-Bound Stop Loss Section -->
+                    <div
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.15); border-radius: 8px;">
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                            <input type="checkbox" id="bl_time_sl_enabled" name="time_sl_enabled" value="1"
+                                style="width:18px;height:18px;accent-color:var(--danger);">
+                            <label for="bl_time_sl_enabled"
+                                style="margin:0;font-weight:600;color:var(--danger);cursor:pointer;">⏰ Enable Time-Bound
+                                Stop Loss</label>
+                        </div>
+                        <div class="form-grid" id="bl_time_sl_fields" style="display:none;">
+                            <div class="form-group">
+                                <label>Activate After (mins)</label>
+                                <input type="number" step="1" min="1" class="form-control" name="time_sl_after_mins"
+                                    placeholder="e.g. 30">
+                                <small style="color:var(--text-muted);font-size:0.7rem;">Minutes from entry fill</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Time SL Price</label>
+                                <input type="number" step="0.05" class="form-control" name="time_sl_price"
+                                    placeholder="Exit if LTP ≤ this">
+                                <small style="color:var(--text-muted);font-size:0.7rem;">For Long: exit if LTP drops to
+                                    this after time</small>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn"><i class="fa-solid fa-paper-plane"></i> Send to Algo</button>
+                    <button type="button" class="btn btn-outline" style="margin-left: 12px;">Save as Draft</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Short MIS Tab -->
+        <div id="short-mis" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Design Short MIS Algo</h2>
+                    <p>Advanced short seller setup with multiple targets and automated chase logic.</p>
+                </div>
+                <form id="form-short-mis" onsubmit="submitTrade(event, 'SHORT_MIS')">
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group" style="position: relative;">
+                            <label>Symbol</label>
+                            <input type="text" class="form-control" name="symbol" id="symp_mis" required
+                                placeholder="e.g. HDFC" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Exchange</label>
+                            <select class="form-control" name="exchange">
+                                <option value="NSE" selected>NSE</option>
+                                <option value="NFO">NFO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type</label>
+                            <select class="form-control" name="product">
+                                <option value="MIS" selected>MIS (Intraday)</option>
+                                <option value="CNC">CNC (Delivery)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Sell Quantity</label>
+                            <input type="number" class="form-control" name="sell_qty" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Entry Short Level</label>
+                            <input type="number" step="0.05" class="form-control" name="entry_level" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid"
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div class="form-group">
+                            <label>Target 1 Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target1">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 1 Qty</label>
+                            <input type="number" class="form-control" name="target1_qty">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 2 Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target2">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 2 Qty</label>
+                            <input type="number" class="form-control" name="target2_qty">
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label>EOD Square-Off Time</label>
+                            <input type="time" class="form-control" name="eod_sqoff_time" value="15:15">
+                        </div>
+                        <div class="form-group">
+                            <label>SL Trigger Price</label>
+                            <input type="number" step="0.05" class="form-control" name="stop_loss" required>
+                        </div>
+                        <div class="form-group">
+                            <label>SL Exit Price (Limit)</label>
+                            <input type="number" step="0.05" class="form-control" name="sl_exit_price"
+                                placeholder="Same as trigger if empty">
+                            <small style="color:var(--text-muted);font-size:0.7rem;">Limit price for SL order (≥ trigger
+                                for Short)</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Market Chase Limit (sec)</label>
+                            <input type="number" class="form-control" name="chase_time" placeholder="After entry trig"
+                                value="30">
+                        </div>
+                    </div>
+
+                    <div class="form-grid"
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(255, 255, 255, 0.03); border-radius: 8px;">
+                        <div class="form-group">
+                            <label>Auto Cancel (If not filled by)</label>
+                            <input type="datetime-local" class="form-control" name="cancel_by">
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 8px;">
+                            <div style="flex: 1;">
+                                <label>Hold Time Max</label>
+                                <input type="number" step="0.1" class="form-control" name="hold_val"
+                                    placeholder="Auto square-off">
+                            </div>
+                            <div style="flex: 1;">
+                                <label>&nbsp;</label>
+                                <select class="form-control" name="hold_unit">
+                                    <option value="m">Mins</option>
+                                    <option value="h">Hours</option>
+                                    <option value="d">Days</option>
+                                    <option value="w">Weeks</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"><i class="fa-solid fa-bolt"></i> Send to MIS Algo</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bracket Accumulate Tab -->
+        <div id="bracket-acc" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Bracket Accumulation & Aggregation Algo</h2>
+                    <p>Specify the frequency of hit buying, total exits, and let the algo aggregate exits to minimize
+                        brokerage.</p>
+                </div>
+                <form id="form-bracket-acc" onsubmit="submitTrade(event, 'BRACKET_ACCUMULATION')">
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group" style="position: relative;">
+                            <label>Symbol</label>
+                            <input type="text" class="form-control" name="symbol" id="symp_bracket" required
+                                placeholder="e.g. ITC" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Buy Hit Level</label>
+                            <input type="number" step="0.05" class="form-control" name="buy_level" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Buy Quantity per hit</label>
+                            <input type="number" class="form-control" name="qty" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Execution Frequency Constraint</label>
+                            <select class="form-control" name="frequency">
+                                <option value="3">Every 3 minutes</option>
+                                <option value="15">Every 15 minutes</option>
+                                <option value="60">Once per hour</option>
+                                <option value="120">Once per 2 hours</option>
+                                <option value="1440">Once a day</option>
+                                <option value="10080">Once a week</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label>Stop Loss</label>
+                            <input type="number" step="0.05" class="form-control" name="stop_loss"
+                                placeholder="Leave blank for none">
+                        </div>
+                        <div class="form-group">
+                            <label>Exit / Sell Level</label>
+                            <input type="number" step="0.05" class="form-control" name="exit_level"
+                                placeholder="The price to sell accumulated stocks" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Exchange</label>
+                            <select class="form-control" name="exchange">
+                                <option value="NSE" selected>NSE</option>
+                                <option value="NFO">NFO (Options)</option>
+                                <option value="BFO">BFO</option>
+                                <option value="MCX">MCX</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type</label>
+                            <select class="form-control" name="product">
+                                <option value="CNC" selected>CNC (Delivery)</option>
+                                <option value="MIS">MIS (Intraday)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid"
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(255, 255, 255, 0.03); border-radius: 8px;">
+                        <div class="form-group">
+                            <label>Auto Cancel (If not filled by)</label>
+                            <input type="datetime-local" class="form-control" name="cancel_by">
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 8px;">
+                            <div style="flex: 1;">
+                                <label>Hold Time Max</label>
+                                <input type="number" step="0.1" class="form-control" name="hold_val"
+                                    placeholder="Auto square-off">
+                            </div>
+                            <div style="flex: 1;">
+                                <label>&nbsp;</label>
+                                <select class="form-control" name="hold_unit">
+                                    <option value="m">Mins</option>
+                                    <option value="h">Hours</option>
+                                    <option value="d">Days</option>
+                                    <option value="w">Weeks</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style="padding: 16px; background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--primary); border-radius: 4px; margin-bottom: 24px; font-size: 0.9rem; color: #cbd5e1;">
+                        <i class="fa-solid fa-circle-info" style="margin-right: 8px;"></i>
+                        <strong>Smart Aggregation:</strong> If ITC is bought 3 times in 10 qty each, and the sell level
+                        is set to ₹300, the algo manager will automatically club this into a single 30 qty order to the
+                        broker.
+                    </div>
+                    <button type="submit" class="btn"><i class="fa-solid fa-layer-group"></i> Deploy Bracket
+                        Tracker</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- VWAP Long Tab -->
+        <div id="vwap-long" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Design VWAP Trail Long</h2>
+                    <p>Enters Trade based on Cross from Above/Below and trails Stop Loss to 3min VWAP.</p>
+                </div>
+                <form id="form-vwap-long" onsubmit="submitTrade(event, 'VWAP_LONG')">
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group" style="position: relative;">
+                            <label>Symbol</label>
+                            <input type="text" class="form-control" name="symbol" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Exchange</label>
+                            <select class="form-control" name="exchange">
+                                <option value="NSE" selected>NSE</option>
+                                <option value="NFO">NFO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type</label>
+                            <select class="form-control" name="product">
+                                <option value="CNC" selected>CNC (Delivery)</option>
+                                <option value="MIS">MIS (Intraday)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Trigger Buy Price</label>
+                            <input type="number" step="0.05" class="form-control" name="entry_level" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" class="form-control" name="qty" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid"
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div class="form-group">
+                            <label>Trigger Condition</label>
+                            <select class="form-control" name="trigger_dir">
+                                <option value="Below">Wait for Price to rise above Trigger (from Below)</option>
+                                <option value="Above">Wait for Price to drop below Trigger (from Above)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Bound Buffer (%)</label>
+                            <input type="number" step="0.01" class="form-control" name="buffer_pct"
+                                placeholder="e.g. 0.05" id="vwap_long_buffer_pct">
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label>Target 1 Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target1">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 1 Qty</label>
+                            <input type="number" class="form-control" name="target1_qty"
+                                placeholder="Leave blank for half">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 2 Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target2">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 2 Qty</label>
+                            <input type="number" class="form-control" name="target2_qty"
+                                placeholder="Leave blank for rest">
+                        </div>
+                        <div class="form-group">
+                            <label>Initial Stop Loss</label>
+                            <input type="number" step="0.05" class="form-control" name="stop_loss">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"><i class="fa-solid fa-rocket"></i> Deploy VWAP Long</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- VWAP Short Tab -->
+        <div id="vwap-short" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Design VWAP Trail Short</h2>
+                    <p>Enters Short Trade and trails Stop Loss to 3min VWAP. Next candle close above clears position.
+                    </p>
+                </div>
+                <form id="form-vwap-short" onsubmit="submitTrade(event, 'VWAP_SHORT')">
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group" style="position: relative;">
+                            <label>Symbol</label>
+                            <input type="text" class="form-control" name="symbol" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Exchange</label>
+                            <select class="form-control" name="exchange">
+                                <option value="NSE" selected>NSE</option>
+                                <option value="NFO">NFO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type</label>
+                            <select class="form-control" name="product">
+                                <option value="MIS" selected>MIS (Intraday)</option>
+                                <option value="CNC">CNC (Delivery)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Trigger Sell Price</label>
+                            <input type="number" step="0.05" class="form-control" name="entry_level" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" class="form-control" name="qty" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid"
+                        style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div class="form-group">
+                            <label>Trigger Condition</label>
+                            <select class="form-control" name="trigger_dir">
+                                <option value="Below">Wait for Price to rise above Trigger (from Below)</option>
+                                <option value="Above">Wait for Price to drop below Trigger (from Above)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Bound Buffer (%)</label>
+                            <input type="number" step="0.01" class="form-control" name="buffer_pct"
+                                placeholder="e.g. 0.05" id="vwap_short_buffer_pct">
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label>Target 1 Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target1">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 1 Qty</label>
+                            <input type="number" class="form-control" name="target1_qty"
+                                placeholder="Leave blank for half">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 2 Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target2">
+                        </div>
+                        <div class="form-group">
+                            <label>Target 2 Qty</label>
+                            <input type="number" class="form-control" name="target2_qty"
+                                placeholder="Leave blank for rest">
+                        </div>
+                        <div class="form-group">
+                            <label>Initial Stop Loss</label>
+                            <input type="number" step="0.05" class="form-control" name="stop_loss">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"><i class="fa-solid fa-arrow-down-short-wide"></i> Deploy VWAP
+                        Short</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Trade Manager Tab -->
+        <div id="trade-manager" class="tab-content">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>Live Trade Manager</h2>
+                        <p>Monitor and manually intervene on trades currently managed by OpenAlgo Master DB.</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div
+                            style="display:flex; flex-direction:column; align-items: flex-end; margin-right: 16px; font-size: 0.85rem; font-weight: 600;">
+                            <div><span style="color:var(--text-muted)">Realized: </span><span id="m_realized"
+                                    style="color:var(--text-main)">₹0</span></div>
+                            <div><span style="color:var(--text-muted)">Total PnL: </span><span id="m_total"
+                                    style="color:var(--text-main)">₹0</span></div>
+                        </div>
+                        <button class="btn btn-outline"
+                            style="border-color: var(--danger); color: var(--danger); font-weight: 700; background: rgba(239, 68, 68, 0.1);"
+                            onclick="triggerCleanSlate()"><i class="fa-solid fa-skull-crossbones"></i> Clean
+                            Slate</button>
+                        <button class="btn btn-outline" onclick="fetchTrades()"><i class="fa-solid fa-rotate-right"></i>
+                            Refresh</button>
+                    </div>
+                </div>
+                <div id="openPositionAlert"
+                    style="display:none; padding: 16px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-left: 4px solid var(--danger); border-radius: 8px; margin-bottom: 20px; color: #fca5a5;">
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger); font-size:1.2rem;"></i>
+                        <strong style="color:#fff; font-size:1rem;">⚠️ Open Positions Detected — Manual Square-Off
+                            Required!</strong>
+                    </div>
+                    <div id="openPositionList" style="font-size:0.9rem; line-height:1.8;"></div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tradesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Symbol</th>
+                                <th>Algo Type</th>
+                                <th>Status</th>
+                                <th>Parameters Context</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                            <tr>
+                                <td colspan="6" style="text-align:center;color:var(--text-muted)">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Position / Order Book Tab -->
+        <div id="books" class="tab-content">
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <h2>Open Positions</h2>
+                        <p>Current positions from broker position book. Refreshes every 15 seconds.</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="fetchBooks()"><i class="fa-solid fa-rotate-right"></i>
+                        Refresh</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="positionsTable">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Exchange</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Avg Price</th>
+                                <th>P&L</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align:center;color:var(--text-muted)">Loading positions...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-header">
+                    <h2>Closed Positions</h2>
+                    <p>Positions squared off entirely today.</p>
+                </div>
+                <div class="table-responsive">
+                    <table id="closedPositionsTable">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Exchange</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Avg Price</th>
+                                <th>Realized P&L</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align:center;color:var(--text-muted)">Loading closed
+                                    positions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Order Book</h2>
+                    <p>All orders placed today. Status, fill qty, and price details.</p>
+                </div>
+                <div class="table-responsive">
+                    <table id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>OID</th>
+                                <th>Symbol</th>
+                                <th>Action</th>
+                                <th>Type</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Filled</th>
+                                <th>Price</th>
+                                <th>Avg Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="10" style="text-align:center;color:var(--text-muted)">Loading orders...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <h2><i class="fa-solid fa-sliders" style="color:var(--primary);margin-right:8px;"></i>Algo
+                            Engine Parameters</h2>
+                        <p>Core algo polling, timeout, and chase parameters. Changes take effect immediately.</p>
+                    </div>
+                </div>
+                <form id="form-settings" onsubmit="saveSettings(event)">
+                    <div class="form-grid" style="margin-bottom:24px;">
+                        <div class="form-group">
+                            <label>Poll Interval (seconds)</label>
+                            <input type="number" step="1" min="5" class="form-control" id="set_poll_interval_seconds"
+                                placeholder="15">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">How often the algo manager scans.
+                                Min 5s.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Order Fill Timeout (seconds)</label>
+                            <input type="number" step="1" min="30" class="form-control"
+                                id="set_order_fill_timeout_seconds" placeholder="300">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">If limit entry not filled, cancel
+                                after this time.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Stale Data Alert Delay (seconds)</label>
+                            <input type="number" step="1" min="20" max="180" class="form-control"
+                                id="set_stale_data_alert_delay" placeholder="180">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">Time to wait before playing stale
+                                data alert sound.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>SL Market Chase Delay (seconds)</label>
+                            <input type="number" step="1" min="5" class="form-control"
+                                id="set_sl_market_chase_delay_seconds" placeholder="30">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">If SL not filled after LTP breach,
+                                MARKET chase after this delay.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Limit Buffer (%)</label>
+                            <input type="number" step="0.01" min="0" class="form-control"
+                                id="set_default_limit_buffer_pct" placeholder="0.05">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">Default trigger bound buffer for
+                                VWAP strategies.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Log Lines</label>
+                            <input type="number" step="1" min="50" class="form-control" id="set_max_log_lines"
+                                placeholder="500">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">In-memory log ring buffer
+                                size.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Default NFO Lot Size</label>
+                            <input type="number" step="1" min="1" class="form-control" id="set_default_nfo_lot_size"
+                                placeholder="65">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">Default lot size for NFO options
+                                (NIFTY=65, BANKNIFTY=15).</small>
+                        </div>
+                    </div>
+
+                    <div class="card-header" style="padding:0 0 16px 0;border:none;">
+                        <h2><i class="fa-solid fa-folder-open" style="color:var(--warning);margin-right:8px;"></i>File
+                            Paths</h2>
+                        <p>Where trade state and execution logs are saved.</p>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:24px;grid-template-columns:1fr 1fr;">
+                        <div class="form-group">
+                            <label>State File Path</label>
+                            <input type="text" class="form-control" id="set_state_file_path"
+                                placeholder="journal_active_state.json">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">JSON state file for crash
+                                recovery.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Execution Log Path</label>
+                            <input type="text" class="form-control" id="set_execution_log_path"
+                                placeholder="trade_executions_journal.csv">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">CSV file for trade execution
+                                journal.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Symbol Database Path</label>
+                            <input type="text" class="form-control" id="set_symbol_db_path"
+                                placeholder="D:/tradeBot/openalgo/db/openalgo.db">
+                            <small style="color:var(--text-muted);font-size:0.75rem;">SQLite DB for symbol
+                                autocomplete.</small>
+                        </div>
+                    </div>
+
+                    <div class="card-header" style="padding:0 0 16px 0;border:none;">
+                        <h2><i class="fa-solid fa-plug" style="color:var(--secondary);margin-right:8px;"></i>OpenAlgo
+                            Connection</h2>
+                        <p>Broker API and WebSocket connection settings. Restart required for changes.</p>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:24px;">
+                        <div class="form-group">
+                            <label>API Key</label>
+                            <input type="text" class="form-control" id="set_openalgo_api_key"
+                                style="font-family:monospace;font-size:0.82rem;">
+                        </div>
+                        <div class="form-group">
+                            <label>Host URL</label>
+                            <input type="text" class="form-control" id="set_openalgo_host"
+                                placeholder="http://127.0.0.1:5000" value="http://127.0.0.1:5000">
+                        </div>
+                        <div class="form-group">
+                            <label>WebSocket URL</label>
+                            <input type="text" class="form-control" id="set_openalgo_ws_url"
+                                placeholder="ws://127.0.0.1:8765" value="ws://127.0.0.1:8765">
+                        </div>
+                        <div class="form-group">
+                            <label>ZMQ Address</label>
+                            <input type="text" class="form-control" id="set_zmq_address"
+                                placeholder="tcp://127.0.0.1:5555" value="127.0.0.1:5555">
+                        </div>
+                    </div>
+
+                    <div style="display:flex;gap:16px;margin-top:8px;">
+                        <button type="submit" class="btn btn-primary" style="min-width:160px;">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Settings
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="resetSettings()"
+                            style="border-color:var(--danger);color:var(--danger);">
+                            <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Defaults
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Trade Log Tab -->
+        <div id="trade-log" class="tab-content">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>Algo Trade Log</h2>
+                        <p>Live terminal feed from the algo manager engine. Auto-refreshes every 3 seconds.</p>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <a href="/api/trade_log/download" class="btn btn-outline" style="text-decoration:none;"><i
+                                class="fa-solid fa-download"></i> Download CSV</a>
+                        <button class="btn btn-outline" onclick="clearLogTerminal()"><i class="fa-solid fa-eraser"></i>
+                            Clear</button>
+                    </div>
+                </div>
+                <div id="logTerminal" style="
+                    background: var(--bg-inset);
+                    border: 1px solid var(--border-strong);
+                    border-radius: 8px;
+                    padding: 16px;
+                    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+                    font-size: 0.82rem;
+                    line-height: 1.7;
+                    max-height: 520px;
+                    overflow-y: auto;
+                    color: var(--text-muted);
+                    white-space: pre-wrap;
+                    word-break: break-all;
+                ">Waiting for algo manager activity...</div>
+            </div>
+        </div>
+
+        <!-- Debug WebSocket Tab -->
+        <div id="debug-ws" class="tab-content">
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-satellite-dish"
+                            style="color:var(--warning);margin-right:8px;"></i>WebSocket Subscription Tester</h2>
+                    <p>Test if an NFO/NSE symbol can be subscribed and receives live ticks. Check the Trade Log for
+                        first-tick confirmation.</p>
+                </div>
+                <div class="form-grid" style="margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label>Symbol</label>
+                        <input type="text" class="form-control" id="debug_sub_symbol"
+                            placeholder="e.g. NIFTY30MAR2622550CE" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Exchange</label>
+                        <select class="form-control" id="debug_sub_exchange">
+                            <option value="NFO" selected>NFO (Options/Futures)</option>
+                            <option value="NSE">NSE (Equity)</option>
+                            <option value="BFO">BFO</option>
+                            <option value="MCX">MCX</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="justify-content: flex-end;">
+                        <label>&nbsp;</label>
+                        <button class="btn" onclick="debugSubscribe()" style="width:100%;"><i
+                                class="fa-solid fa-satellite-dish"></i> Subscribe & Test</button>
+                    </div>
+                </div>
+                <div id="debugSubResult"
+                    style="display:none; padding:16px; border-radius:8px; margin-bottom:16px; font-size:0.9rem;"></div>
+                <div
+                    style="padding:12px 16px; background:rgba(59,130,246,0.08); border-left:4px solid var(--primary); border-radius:4px; font-size:0.85rem; color:#94a3b8;">
+                    <i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>
+                    After subscribing, switch to <strong>Trade Log</strong> tab. You should see a <code
+                        style="color:var(--secondary)">📡 [WS] First tick</code> entry within ~5 seconds if data is
+                    flowing.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <h2><i class="fa-solid fa-database" style="color:var(--primary);margin-right:8px;"></i>Live LTP
+                            Cache</h2>
+                        <p>All symbols currently in the in-memory LTP dictionary with their last update age.</p>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <input type="text" class="form-control" id="debugLtpFilter" placeholder="Filter..."
+                            style="width:200px;padding:8px 12px;font-size:0.85rem;">
+                        <button class="btn btn-outline" onclick="fetchDebugLtp()" style="white-space:nowrap;"><i
+                                class="fa-solid fa-rotate-right"></i> Refresh</button>
+                    </div>
+                </div>
+                <div id="debugLtpCount" style="margin-bottom:12px;font-size:0.85rem;color:var(--text-muted);">Loading...
+                </div>
+                <div class="table-responsive">
+                    <table id="debugLtpTable">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>LTP</th>
+                                <th>Last Update (sec ago)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="text-align:center;color:var(--text-muted)">Click Refresh to load
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts Tab -->
+        <div id="alerts" class="tab-content">
+            <!-- Create New Alert -->
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bell" style="color:var(--warning);margin-right:8px;"></i>Create New Alert
+                    </h2>
+                    <p>Set price crossover or VWAP crossover alerts for stocks, ETFs, options, or indices (NIFTY,
+                        SENSEX, BANKNIFTY).</p>
+                </div>
+                <form id="form-alert" onsubmit="createAlert(event)">
+                    <div class="form-grid" style="margin-bottom:20px;">
+                        <div class="form-group" style="position:relative;">
+                            <label>Symbol / Index</label>
+                            <input type="text" class="form-control" name="symbol" id="alert_symbol" required
+                                placeholder="e.g. NIFTY, RELIANCE, SENSEX" autocomplete="off">
+                            <small style="color:var(--text-muted);font-size:0.7rem;">Supports: NSE stocks, NIFTY...
+                                Options: switch to NFO/BFO</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Exchange</label>
+                            <select class="form-control" name="exchange">
+                                <option value="NSE" selected>NSE (Equity / Index)</option>
+                                <option value="NFO">NFO (Options / Futures)</option>
+                                <option value="BFO">BFO</option>
+                                <option value="MCX">MCX</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Alert Type</label>
+                            <select class="form-control" name="alert_type" id="alert_type"
+                                onchange="toggleAlertTypeFields()">
+                                <option value="price_crossover">Price Crossover</option>
+                                <option value="vwap_crossover">VWAP Crossover</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="alert_target_group">
+                            <label>Target Price</label>
+                            <input type="number" step="0.05" class="form-control" name="target_price"
+                                placeholder="e.g. 22900">
+                        </div>
+                        <div class="form-group">
+                            <label>Crossover Direction</label>
+                            <select class="form-control" name="direction">
+                                <option value="any">Any Direction</option>
+                                <option value="above">Cross from Below (price rises above)</option>
+                                <option value="below">Cross from Above (price drops below)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="alert_timeframe_group" style="display:none;">
+                            <label>Candle Timeframe</label>
+                            <select class="form-control" name="timeframe">
+                                <option value="3m">3 Minute Close</option>
+                                <option value="15m">15 Minute Close</option>
+                            </select>
+                            <small style="color:var(--text-muted);font-size:0.7rem;">Close price of this candle vs
+                                VWAP</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Note (optional)</label>
+                            <input type="text" class="form-control" name="note" placeholder="e.g. Support level bounce">
+                        </div>
+                    </div>
+                    <div
+                        style="padding:12px 16px;background:rgba(245,158,11,0.08);border-left:4px solid var(--warning);border-radius:4px;margin-bottom:20px;font-size:0.85rem;color:#94a3b8;">
+                        <i class="fa-solid fa-circle-info" style="margin-right:6px;"></i>
+                        <strong>VWAP Crossover:</strong> Uses intraday VWAP calculated from candle data (Typical Price ×
+                        Volume). The close price of the selected timeframe candle is compared against the running VWAP.
+                        Alert fires when a crossover is detected.
+                    </div>
+                    <button type="submit" class="btn"><i class="fa-solid fa-bell"></i> Create Alert</button>
+                </form>
+            </div>
+            <!-- Scheduled Alerts Table -->
+            <div class="card">
+                <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <h2><i class="fa-solid fa-list-check"
+                                style="color:var(--primary);margin-right:8px;"></i>Scheduled Alerts</h2>
+                        <p>All active and triggered alerts. Triggered alerts appear first. Edit, toggle, reset or
+                            delete.</p>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-outline" onclick="fetchAlerts()"><i class="fa-solid fa-rotate-right"></i>
+                            Refresh</button>
+                    </div>
+                </div>
+                <!-- Bulk Action Bar (hidden until selections made) -->
+                <div id="alertsBulkBar"
+                    style="display:none;padding:10px 16px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;margin-bottom:16px;display:none;align-items:center;justify-content:space-between;">
+                    <span style="font-size:0.9rem;color:var(--text-main);font-weight:600;"><i
+                            class="fa-solid fa-check-double" style="margin-right:6px;color:var(--primary)"></i><span
+                            id="alertsBulkCount">0</span> alert(s) selected</span>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-outline"
+                            style="padding:6px 14px;font-size:0.82rem;border-color:var(--danger);color:var(--danger)"
+                            onclick="bulkDeleteAlerts()"><i class="fa-solid fa-trash"></i> Delete Selected</button>
+                        <button class="btn btn-outline" style="padding:6px 14px;font-size:0.82rem;"
+                            onclick="clearAlertSelections()"><i class="fa-solid fa-xmark"></i> Clear</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="alertsTable">
+                        <thead>
+                            <tr>
+                                <th style="width:36px;"><input type="checkbox" id="alertSelectAll"
+                                        onchange="toggleAllAlertCheckboxes(this)"
+                                        style="width:16px;height:16px;accent-color:var(--primary);cursor:pointer;"></th>
+                                <th>ID</th>
+                                <th>Symbol</th>
+                                <th>Type</th>
+                                <th>Target / TF</th>
+                                <th>Direction</th>
+                                <th>Status</th>
+                                <th>Triggered</th>
+                                <th>Note</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="10" style="text-align:center;color:var(--text-muted)">Loading alerts...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- close .main-content -->
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const symbolInputs = document.querySelectorAll('input[name="symbol"]');
+
+            symbolInputs.forEach(input => {
+                let currentFocus;
+                input.addEventListener("input", async function (e) {
+                    let a, b, val = this.value;
+                    closeAllLists();
+                    if (!val) { return false; }
+                    currentFocus = -1;
+
+                    a = document.createElement("DIV");
+                    a.setAttribute("id", this.id + "autocomplete-list");
+                    a.setAttribute("class", "autocomplete-items");
+                    this.parentNode.appendChild(a);
+
+                    try {
+                        const _form = input.closest('form');
+                        const _exchSel = _form ? _form.querySelector('select[name="exchange"]') : null;
+                        const _exchVal = _exchSel ? _exchSel.value : '';
+                        const _exchParam = _exchVal ? `&exchange=${_exchVal}` : '';
+                        // Use rich mode for intelligent symbol lookup
+                        const res = await fetch(`/api/symbols?q=${val}&rich=1${_exchParam}`);
+                        if (res.ok) {
+                            const results = await res.json();
+                            for (let i = 0; i < results.length; i++) {
+                                const item = results[i];
+                                b = document.createElement("DIV");
+                                // Rich display: symbol + exchange badge + type + lot info
+                                const exchColors = { 'NSE': '#3fb950', 'NFO': '#f59e0b', 'BFO': '#e879f9', 'MCX': '#fb923c', 'BSE': '#60a5fa', 'CDS': '#94a3b8' };
+                                const exchColor = exchColors[item.exchange] || 'var(--text-muted)';
+                                const symMatch = item.symbol.substr(0, val.length);
+                                const symRest = item.symbol.substr(val.length);
+                                let metaInfo = '';
+                                if (item.instrumenttype && item.instrumenttype !== 'EQ') {
+                                    metaInfo += `<span style="color:var(--text-muted);font-size:0.75rem;"> ${item.instrumenttype}</span>`;
+                                }
+                                if (item.lotsize && item.lotsize > 1) {
+                                    metaInfo += `<span style="color:var(--text-muted);font-size:0.75rem;"> Lot:${item.lotsize}</span>`;
+                                }
+                                if (item.expiry) {
+                                    metaInfo += `<span style="color:var(--text-muted);font-size:0.7rem;"> ${item.expiry}</span>`;
+                                }
+                                b.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;">`
+                                    + `<span><strong>${symMatch}</strong>${symRest}${item.name ? ' <small style="color:var(--text-muted)">' + item.name + '</small>' : ''}</span>`
+                                    + `<span style="display:flex;align-items:center;gap:6px;">`
+                                    + `<span style="background:${exchColor}22;color:${exchColor};padding:1px 6px;border-radius:4px;font-size:0.7rem;font-weight:700;">${item.exchange}</span>`
+                                    + metaInfo
+                                    + `</span></div>`;
+                                // Store rich data as attributes for auto-population
+                                b.dataset.symbol = item.symbol;
+                                b.dataset.exchange = item.exchange;
+                                b.dataset.lotsize = item.lotsize || 1;
+                                b.dataset.instrumenttype = item.instrumenttype || 'EQ';
+                                b.addEventListener("click", function (e) {
+                                    input.value = this.dataset.symbol;
+                                    // Auto-populate exchange, lot size, and product type
+                                    const parentForm = input.closest('form');
+                                    if (parentForm) {
+                                        const exchSelect = parentForm.querySelector('select[name="exchange"]');
+                                        if (exchSelect) {
+                                            // Set exchange value and trigger change event for NFO lot detection
+                                            const targetExch = this.dataset.exchange;
+                                            if (exchSelect.querySelector(`option[value="${targetExch}"]`)) {
+                                                exchSelect.value = targetExch;
+                                                exchSelect.dispatchEvent(new Event('change'));
+                                            }
+                                        }
+                                        // Auto-set lot size for NFO/BFO/MCX
+                                        const lotInput = parentForm.querySelector('.nfo-lot-group input[name="lot_size"]');
+                                        const lotSize = parseInt(this.dataset.lotsize);
+                                        if (lotInput && lotSize > 1) {
+                                            lotInput.value = lotSize;
+                                            lotInput.dispatchEvent(new Event('input'));
+                                        }
+                                        // Auto-set product type for derivatives
+                                        const prodSelect = parentForm.querySelector('select[name="product"]');
+                                        if (prodSelect && ['NFO', 'BFO', 'MCX'].includes(this.dataset.exchange)) {
+                                            if (prodSelect.querySelector('option[value="NRML"]')) {
+                                                prodSelect.value = 'NRML';
+                                            } else if (prodSelect.querySelector('option[value="MIS"]')) {
+                                                prodSelect.value = 'MIS';
+                                            }
+                                        }
+                                    }
+                                    closeAllLists();
+                                });
+                                a.appendChild(b);
+                            }
+                        }
+                    } catch (err) {
+                        console.error(err);
+                    }
+                });
+
+                input.addEventListener("keydown", function (e) {
+                    let x = document.getElementById(this.id + "autocomplete-list");
+                    if (x) x = x.getElementsByTagName("div");
+                    if (e.keyCode == 40) {
+                        currentFocus++;
+                        addActive(x);
+                    } else if (e.keyCode == 38) {
+                        currentFocus--;
+                        addActive(x);
+                    } else if (e.keyCode == 13) {
+                        if (currentFocus > -1) {
+                            e.preventDefault();
+                            if (x) x[currentFocus].click();
+                        }
+                    }
+                });
+
+                function addActive(x) {
+                    if (!x) return false;
+                    removeActive(x);
+                    if (currentFocus >= x.length) currentFocus = 0;
+                    if (currentFocus < 0) currentFocus = (x.length - 1);
+                    x[currentFocus].classList.add("autocomplete-active");
+                }
+
+                function removeActive(x) {
+                    for (let i = 0; i < x.length; i++) {
+                        x[i].classList.remove("autocomplete-active");
+                    }
+                }
+
+                function closeAllLists(elmnt) {
+                    var x = document.getElementsByClassName("autocomplete-items");
+                    for (var i = 0; i < x.length; i++) {
+                        if (elmnt != x[i] && elmnt != input) {
+                            x[i].parentNode.removeChild(x[i]);
+                        }
+                    }
+                }
+
+                document.addEventListener("click", function (e) {
+                    closeAllLists(e.target);
+                });
+            });
+        });
+
+        const API_URL = '/api/trades';
+
+        function switchTab(tabId, element) {
+            // Clear active from BOTH sidebar and header tabs
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.header-tab').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // Switch tab content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+
+            // Update Title
+            const titles = {
+                'basic-long': 'Basic Long Design',
+                'short-mis': 'Short MIS Design',
+                'vwap-long': 'VWAP Trail Long',
+                'vwap-short': 'VWAP Trail Short',
+                'bracket-acc': 'Bracket Accumulator Strategy',
+                'books': 'Position & Order Book',
+                'settings': 'Settings',
+                'trade-log': 'Algo Trade Log',
+                'trade-manager': 'Active Trade Manager',
+                'debug-ws': 'WebSocket Debug',
+                'alerts': 'Price & VWAP Alerts'
+            };
+            document.getElementById('page-title').innerText = titles[tabId] || 'Trade Design';
+
+            // Tab-specific init
+            if (tabId === 'trade-manager') fetchTrades();
+            if (tabId === 'books') { fetchBooks(); startBooksPolling(); } else { stopBooksPolling(); }
+            if (tabId === 'trade-log') { startLogPolling(); } else { stopLogPolling(); }
+            if (tabId === 'settings') { loadSettings(); }
+            if (tabId === 'vwap-long' || tabId === 'vwap-short') { applyFormDefaults(); }
+            if (tabId === 'debug-ws') { fetchDebugLtp(); }
+            if (tabId === 'alerts') { fetchAlerts(); startAlertsPolling(); } else { stopAlertsPolling(); }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            if (type === 'error') {
+                toast.style.borderLeftColor = 'var(--danger)';
+                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation" style="color:var(--danger)"></i> ${message}`;
+            } else {
+                toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--secondary)"></i> ${message}`;
+            }
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        async function submitTrade(event, algoType) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const params = Object.fromEntries(formData.entries());
+            const symbol = params.symbol.toUpperCase();
+
+            // Clean up missing/empty numeric fields
+            for (let key in params) {
+                if (params[key] === "") {
+                    delete params[key];
+                } else if (!isNaN(params[key]) && key !== 'symbol' && key !== 'eod_sqoff_time' && key !== 'frequency') {
+                    params[key] = parseFloat(params[key]);
+                }
+            }
+
+            // NFO Lot Conversion: lots × lot_size = actual quantity
+            if (['NFO', 'BFO', 'MCX'].includes(params.exchange)) {
+                const lotSize = parseInt(params.lot_size) || 65;
+                if (params.qty !== undefined && params.qty !== null) {
+                    params.lots = parseInt(params.qty) || 0;
+                    params.qty = params.lots * lotSize;
+                }
+                if (params.sell_qty !== undefined && params.sell_qty !== null) {
+                    params.lots = parseInt(params.sell_qty) || 0;
+                    params.sell_qty = params.lots * lotSize;
+                }
+            } else {
+                delete params.lot_size;
+            }
+
+            // The main payload format
+            const payload = {
+                symbol: symbol,
+                algo_type: algoType,
+                parameters: params
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    showToast(`Successfully dispatched ${algoType} for ${symbol} to OpenAlgo.`);
+                    form.reset();
+                    // Re-trigger exchange handler to fix NFO lot field visibility after reset
+                    const exSel = form.querySelector('select[name="exchange"]');
+                    if (exSel) exSel.dispatchEvent(new Event('change'));
+                } else {
+                    showToast(`Failed to deploy. Server error.`, 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast(`Unable to connect to Algo Server (Check Network).`, 'error');
+            }
+        }
+
+        async function fetchTrades() {
+            // PREVENT TETHERING: Protect active input typing from being clobbered by background polling
+            if (document.activeElement && document.activeElement.tagName === 'INPUT' && document.activeElement.id.startsWith('exit-')) {
+                return;
+            }
+
+            const tbody = document.querySelector('#tradesTable tbody');
+            if (tbody.children.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Loading tracking data...</td></tr>';
+            }
+
+            try {
+                const res = await fetch(API_URL);
+                if (res.ok) {
+                    const data = await res.json();
+                    renderTrades(data.trades);
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger)">Failed to fetch trade data</td></tr>';
+                }
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--warning)">Algo Server Offline. Check the Python Master DB.</td></tr>';
+            }
+        }
+
+        let allTradesCache = [];
+
+        function renderTrades(trades) {
+            allTradesCache = trades;
+            const tbody = document.querySelector('#tradesTable tbody');
+            tbody.innerHTML = '';
+
+            // Detect open positions
+            const openPositions = trades.filter(t =>
+                t.parameters && t.parameters.open_position === true
+            );
+
+            const alertDiv = document.getElementById('openPositionAlert');
+            const alertList = document.getElementById('openPositionList');
+
+            if (openPositions.length > 0) {
+                alertDiv.style.display = 'block';
+                alertList.innerHTML = openPositions.map(t => {
+                    const p = t.parameters;
+                    let qty = p.qty || p.sell_qty || p.total_accumulated || '?';
+                    let ptype = p.product || 'CNC';
+                    let atype = t.algo_type.replace('_', ' ');
+                    return `<div>🔴 <strong>${t.symbol}</strong> — ${atype} | ${qty} qty ${ptype} | <span style="color:var(--danger)">Needs manual square-off on broker terminal</span></div>`;
+                }).join('');
+            } else {
+                alertDiv.style.display = 'none';
+            }
+
+            if (trades.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No trades registered in journal.</td></tr>';
+                return;
+            }
+
+            trades.forEach(trade => {
+                const paramStrs = Object.entries(trade.parameters)
+                    .filter(([k, v]) => k !== 'symbol' && k !== 'open_position' && k !== 'stopped_at' && k !== 'entry_time' && k !== 'last_exec_time')
+                    .map(([k, v]) => `<span style="color:var(--primary)">${k}:</span> ${v}`)
+                    .join(' | ');
+
+                let statusBadge = 'pending';
+                let statusLabel = trade.status;
+                if (trade.status === 'RUNNING') statusBadge = 'running';
+                if (trade.status === 'COMPLETED') statusBadge = 'completed';
+
+                const hasOpenPos = trade.parameters && trade.parameters.open_position === true;
+                if (hasOpenPos) {
+                    statusLabel = '⚠️ OPEN POS';
+                }
+
+                let actions = '';
+                const rQty = trade.parameters.remaining_qty;
+                const hasPosition = trade.parameters.entry_time && rQty > 0;
+
+                if (trade.status === 'PENDING') {
+                    actions = `
+                        <button class="btn btn-outline" style="padding:4px 8px;font-size:0.8rem;" onclick="actionTrade(${trade.id}, 'SEND_TO_ALGO')"><i class="fa-solid fa-play"></i> Run</button>
+                        <button class="btn btn-outline" style="padding:4px 8px;font-size:0.8rem;border-color:var(--danger);color:var(--danger)" onclick="actionTrade(${trade.id}, 'CANCEL')"><i class="fa-solid fa-ban"></i> Cancel</button>
+                    `;
+                } else if (trade.status === 'RUNNING') {
+                    let exitControls = '';
+                    if (hasPosition) {
+                        statusLabel = `RUNNING (${rQty} qty)`;
+                        exitControls = `
+                            <div style="display:flex; gap:4px; align-items:center; margin-top:4px;">
+                                <input type="number" id="exit-qty-${trade.id}" placeholder="Qty" value="${rQty}" style="width:60px;padding:3px 6px;font-size:0.75rem;background:var(--bg-base);color:var(--text-main);border:1px solid var(--border);border-radius:4px;">
+                                <input type="number" step="0.05" id="exit-px-${trade.id}" placeholder="Limit ₹ (0=MKT)" style="width:110px;padding:3px 6px;font-size:0.75rem;background:var(--bg-base);color:var(--text-main);border:1px solid var(--border);border-radius:4px;">
+                                <button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--warning);color:var(--warning)" onclick="manualExit(${trade.id})"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
+                            </div>
+                        `;
+                    }
+                    actions = `
+                        <div style="display:flex; flex-direction:column; gap:4px;">
+                            <button class="btn btn-outline" style="padding:4px 8px;font-size:0.8rem;border-color:var(--warning);color:var(--warning)" onclick="actionTrade(${trade.id}, 'CANCEL')"><i class="fa-solid fa-circle-stop"></i> Stop Algo</button>
+                            ${exitControls}
+                        </div>
+                    `;
+                } else if (hasOpenPos) {
+                    actions = `
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <span style="color:var(--danger);font-size:0.8rem;font-weight:600;"><i class="fa-solid fa-triangle-exclamation"></i> Square off manually!</span>
+                            <div style="display:flex; gap:4px; align-items:center;">
+                                <input type="number" id="exit-qty-${trade.id}" placeholder="Qty" style="width:60px;padding:3px 6px;font-size:0.75rem;background:var(--bg-base);color:var(--text-main);border:1px solid var(--border);border-radius:4px;">
+                                <input type="number" step="0.05" id="exit-px-${trade.id}" placeholder="Limit ₹ (0=MKT)" style="width:110px;padding:3px 6px;font-size:0.75rem;background:var(--bg-base);color:var(--text-main);border:1px solid var(--border);border-radius:4px;">
+                                <button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--warning);color:var(--warning)" onclick="manualExit(${trade.id})"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
+                            </div>
+                            <button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--secondary);color:var(--secondary)" onclick="actionTrade(${trade.id}, 'CLEAR_WARNING')"><i class="fa-solid fa-check"></i> Mark Resolved</button>
+                        </div>
+                    `;
+                } else {
+                    actions = `
+                        <div style="display:flex; flex-direction:column; gap:4px;">
+                            <span style="color:var(--text-muted);font-size:0.8rem; margin-bottom:2px;">Archived / Done</span>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--primary);color:var(--text-main)" onclick="redesignTrade(${trade.id})"><i class="fa-solid fa-pen-to-square"></i> Redesign</button>
+                                <button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--danger);color:var(--danger)" onclick="actionTrade(${trade.id}, 'DELETE')"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const tr = document.createElement('tr');
+                if (hasOpenPos) {
+                    tr.style.background = 'rgba(239, 68, 68, 0.08)';
+                    tr.style.borderLeft = '3px solid var(--danger)';
+                }
+                tr.innerHTML = `
+                    <td>#${trade.id}</td>
+                    <td style="font-weight:600;color:${hasOpenPos ? 'var(--danger)' : 'var(--text-heading)'}">
+                        ${trade.symbol}
+                        ${trade.live_pnl !== undefined && trade.live_pnl !== 0 ? `<div style="font-size:0.75rem; color:${trade.live_pnl >= 0 ? 'var(--secondary)' : 'var(--danger)'}; margin-top:3px">${trade.live_pnl >= 0 ? '+' : ''}₹${trade.live_pnl}</div>` : ''}
+                    </td>
+                    <td>${trade.algo_type.replace('_', ' ')}</td>
+                    <td><span class="badge ${statusBadge}" ${hasOpenPos ? 'style="color:var(--danger);background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.5);"' : ''}>${statusLabel}</span></td>
+                    <td style="font-size:0.8rem;color:var(--text-muted);max-width:300px;">${paramStrs}</td>
+                    <td>${actions}</td>
+                `;
+                tbody.appendChild(tr);
+
+                // --- Order Log sub-row ---
+                const orderLog = trade.parameters.order_log;
+                if (orderLog && orderLog.length > 0) {
+                    const logTr = document.createElement('tr');
+                    logTr.style.background = 'rgba(59, 130, 246, 0.03)';
+                    const logEntries = orderLog.map(o => {
+                        const t = new Date(o.time * 1000);
+                        const ts = t.toLocaleTimeString('en-IN', { hour12: false });
+                        const dt = t.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+                        return `<span style="color:${o.action === 'BUY' ? 'var(--secondary)' : 'var(--danger)'}">${o.action}</span> ${o.qty}x @ ${o.price} <span style="color:var(--text-muted)">[${dt} ${ts}]</span> <span style="color:var(--text-faint)">OID:${o.order_id || '?'}</span>`;
+                    }).join(' &nbsp;|&nbsp; ');
+                    logTr.innerHTML = `<td colspan="6" style="padding:4px 16px;font-size:0.75rem;border-top:none;color:var(--text-muted);"><i class="fa-solid fa-receipt" style="margin-right:6px;color:var(--primary)"></i>${logEntries}</td>`;
+                    tbody.appendChild(logTr);
+                }
+            });
+        }
+
+        async function actionTrade(id, action) {
+            try {
+                const res = await fetch(`${API_URL}/${id}/action`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+                if (res.ok) {
+                    showToast(`Action ${action} executed for Trade #${id}.`);
+                    fetchTrades(); // fresh update
+                } else {
+                    showToast(`Error performing action.`, 'error');
+                }
+            } catch (e) {
+                showToast(`Unable to contact Server.`, 'error');
+            }
+        }
+
+        let ltpPollTimer = null;
+        let activeSquareOffSym = '';
+
+        async function openRawSquareOff(symbol, defaultQty = 0) {
+            activeSquareOffSym = symbol;
+            document.getElementById('soSym').innerText = symbol;
+            document.getElementById('soQty').value = defaultQty > 0 ? defaultQty : '';
+            document.getElementById('soPx').value = '0';
+            document.getElementById('squareOffModalOverlay').style.display = 'flex';
+            pollSingleLtp(symbol, 'soLtp');
+        }
+
+        async function confirmSquareOffModal() {
+            const sym = activeSquareOffSym;
+            const qty = parseInt(document.getElementById('soQty').value || 0);
+            const price = parseFloat(document.getElementById('soPx').value || 0);
+            document.getElementById('squareOffModalOverlay').style.display = 'none';
+
+            showToast(`Firing raw fallback square off API for ${sym}...`, 'warning');
+            try {
+                const res = await fetch(`/api/broker/squareoff`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol: sym, qty, price })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    showToast(data.message || 'Success', 'success');
+                    fetchBooks();
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || 'Request failed', 'error');
+                }
+            } catch (e) {
+                showToast('API Disconnected', 'error');
+            }
+        }
+
+        async function pollSingleLtp(sym, elementId) {
+            const poll = async () => {
+                const modal = document.getElementById('squareOffModalOverlay');
+                if (modal && modal.style.display === 'none') return;
+                try {
+                    const r = await fetch(`/api/ltp/${sym}`);
+                    if (r.ok) {
+                        const d = await r.json();
+                        const el = document.getElementById(elementId);
+                        if (el) el.innerText = d.ltp > 0 ? "₹" + d.ltp : "Loading...";
+                    }
+                } catch (e) { }
+                if (modal && modal.style.display !== 'none') setTimeout(poll, 1500);
+            };
+            poll();
+        }
+
+        async function squareOffFromPositions(symbol, rawQty = 0) {
+            const runningTrade = allTradesCache.find(t => t.symbol === symbol && t.status === 'RUNNING');
+            if (!runningTrade) {
+                openRawSquareOff(symbol, Math.abs(rawQty));
+                return;
+            }
+            if (!confirm(`Do you want to explicitly flush managed trade ${symbol} to Market?`)) return;
+
+            showToast(`Initiating managed Square Off for ${symbol}...`);
+            try {
+                const qty = parseInt(runningTrade.parameters.remaining_qty || 0);
+                if (qty <= 0) { showToast('Trade has no remaining qty to sell', 'error'); return; }
+                const res = await fetch(`${API_URL}/${runningTrade.id}/manual_exit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ qty: qty, price: 0 })
+                });
+                if (res.ok) {
+                    showToast(`Square Off Submitted for ${symbol}. Waiting for Broker.`, 'success');
+                    fetchBooks();
+                    fetchTrades();
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || 'Exit failed', 'error');
+                }
+            } catch (e) {
+                showToast('Unable to contact Server.', 'error');
+            }
+        }
+
+        async function manualExit(tradeId) {
+            const qtyEl = document.getElementById(`exit-qty-${tradeId}`);
+            const pxEl = document.getElementById(`exit-px-${tradeId}`);
+            const qty = parseInt(qtyEl?.value || '0');
+            const price = parseFloat(pxEl?.value || '0');
+            if (qty <= 0) { showToast('Enter a valid quantity', 'error'); return; }
+            try {
+                const res = await fetch(`${API_URL}/${tradeId}/manual_exit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ qty, price })
+                });
+                if (res.ok) {
+                    showToast(`Manual exit placed: ${qty}x @ ${price > 0 ? '₹' + price : 'MARKET'}`);
+                    fetchTrades();
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || 'Exit failed', 'error');
+                }
+            } catch (e) {
+                showToast('Unable to contact Server.', 'error');
+            }
+        }
+
+        function redesignTrade(id) {
+            try {
+                const trade = allTradesCache.find(t => t.id == id);
+                if (!trade) { showToast('Trade missing from cache.', 'error'); return; }
+
+                const algoTypesMap = {
+                    'BASIC_LONG': 'basic-long',
+                    'SHORT_MIS': 'short-mis',
+                    'VWAP_LONG': 'vwap-long',
+                    'VWAP_SHORT': 'vwap-short',
+                    'BRACKET_ACCUMULATION': 'bracket-acc'
+                };
+                const tabId = algoTypesMap[trade.algo_type];
+                if (!tabId) { showToast('Mapped type missing.', 'error'); return; }
+
+                // Safely toggle tabs manually to ensure execution
+                document.querySelectorAll('.nav-item, .header-tab').forEach(el => el.classList.remove('active'));
+                const navs = document.querySelectorAll('.nav-item');
+                navs.forEach(n => {
+                    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(tabId)) {
+                        n.classList.add('active');
+                    }
+                });
+
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                const targetTab = document.getElementById(tabId);
+                if (targetTab) targetTab.classList.add('active');
+
+                const titles = {
+                    'basic-long': 'Basic Long Design',
+                    'short-mis': 'Short MIS Design',
+                    'vwap-long': 'VWAP Trail Long',
+                    'vwap-short': 'VWAP Trail Short',
+                    'bracket-acc': 'Bracket Accumulator Strategy'
+                };
+                const pe = document.getElementById('page-title');
+                if (pe) pe.innerText = titles[tabId] || 'Trade Design';
+
+                const form = document.getElementById('form-' + tabId);
+                if (!form) { showToast('Physical form missing.', 'error'); return; }
+
+                const skipKeys = [
+                    'order_log', 'open_position', 'stopped_at', 'entry_time',
+                    'last_exec_time', 'remaining_qty', 'pending_entry_order_id',
+                    'entry_placed_time', 'entry_price', 'last_bracket_buy_time',
+                    'sl_triggered', 'sl_order_id', 'exit_chase', 'sl_market_chase_time',
+                    'sl_chase_order_id', 'sl_breach_time'
+                ];
+
+                for (let key in trade.parameters) {
+                    if (skipKeys.includes(key)) continue;
+                    try {
+                        const field = form.querySelector('[name="' + key + '"]');
+                        if (field) field.value = trade.parameters[key];
+                    } catch (err) { /* ignore safe DOM queries */ }
+                }
+
+                const symbolField = form.querySelector('[name="symbol"]');
+                if (symbolField) symbolField.value = trade.symbol;
+
+                window.scrollTo(0, 0);
+                showToast(`Loaded Design #${id} for editing`, 'success');
+            } catch (e) {
+                showToast(`Redesign failed: ${e.message}`, 'error');
+            }
+        }
+
+        // ========== TRADE LOG TERMINAL ==========
+        let logSince = 0;
+        let logInterval = null;
+
+        async function fetchLogs() {
+            try {
+                const res = await fetch(`/api/logs?since=${logSince}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.logs.length > 0) {
+                        const terminal = document.getElementById('logTerminal');
+                        if (logSince === 0 && data.total > 0) {
+                            terminal.innerHTML = '';
+                        }
+                        data.logs.forEach(line => {
+                            const div = document.createElement('div');
+                            div.style.padding = '2px 0';
+                            // Colorize based on content
+                            if (line.includes('✅') || line.includes('FILLED')) {
+                                div.style.color = 'var(--secondary)';
+                            } else if (line.includes('🚨') || line.includes('Error')) {
+                                div.style.color = 'var(--danger)';
+                            } else if (line.includes('❌') || line.includes('CANCELLED')) {
+                                div.style.color = 'var(--danger)';
+                            } else if (line.includes('🎯') || line.includes('signal')) {
+                                div.style.color = 'var(--warning)';
+                            } else if (line.includes('⏰') || line.includes('HOLD TIME')) {
+                                div.style.color = 'var(--warning)';
+                            } else if (line.includes('🔄') || line.includes('BRACKET')) {
+                                div.style.color = 'var(--primary)';
+                            } else if (line.includes('⏱') || line.includes('Scanning')) {
+                                div.style.color = 'var(--text-faint)';
+                            }
+                            div.textContent = line;
+                            terminal.appendChild(div);
+                        });
+                        logSince = data.total;
+                        terminal.scrollTop = terminal.scrollHeight;
+                    }
+                }
+            } catch (e) { /* silently skip */ }
+        }
+
+        function clearLogTerminal() {
+            document.getElementById('logTerminal').innerHTML = '<span style="color:var(--text-faint)">Terminal cleared. Waiting for new activity...</span>';
+            logSince = 0;
+        }
+
+        function startLogPolling() {
+            if (!logInterval) {
+                fetchLogs();
+                logInterval = setInterval(fetchLogs, 3000);
+            }
+        }
+
+        function stopLogPolling() {
+            if (logInterval) {
+                clearInterval(logInterval);
+                logInterval = null;
+            }
+        }
+
+        // Auto-start polling when Trade Log tab is active
+        const origSwitchTab = window.switchTab || function () { };
+        const _origSwitchTab = typeof switchTab === 'function' ? switchTab : null;
+
+        // ========== BOT STATUS POLLING ==========
+        async function checkBotStatus() {
+            try {
+                const res = await fetch('/api/bot_status');
+                if (res.ok) {
+                    const data = await res.json();
+                    const dot = document.getElementById('botStatusDot');
+                    const txt = document.getElementById('botStatusText');
+                    const pill = document.getElementById('botStatusPill');
+                    if (data.status === 'live') {
+                        dot.style.background = 'var(--secondary)';
+                        dot.style.boxShadow = '0 0 8px rgba(16, 185, 129, 0.6)';
+                        txt.textContent = 'Bot Live';
+                        pill.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                    } else {
+                        dot.style.background = 'var(--danger)';
+                        dot.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.6)';
+                        txt.textContent = 'Bot Offline';
+                        pill.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                    }
+                }
+            } catch (e) {
+                const dot = document.getElementById('botStatusDot');
+                const txt = document.getElementById('botStatusText');
+                if (dot) { dot.style.background = 'var(--danger)'; dot.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.6)'; }
+                if (txt) txt.textContent = 'Bot Offline';
+            }
+        }
+        checkBotStatus();
+        setInterval(checkBotStatus, 15000);
+        setInterval(fetchTrades, 15000);
+        fetchTrades();
+
+        // ========== FORM DEFAULTS FROM SETTINGS ==========
+        async function applyFormDefaults() {
+            try {
+                const res = await fetch('/api/settings/form_defaults');
+                if (!res.ok) return;
+                const d = await res.json();
+                // Populate buffer_pct fields only if they are currently empty
+                const bufLong = document.getElementById('vwap_long_buffer_pct');
+                const bufShort = document.getElementById('vwap_short_buffer_pct');
+                if (bufLong && !bufLong.value) bufLong.value = d.default_limit_buffer_pct;
+                if (bufShort && !bufShort.value) bufShort.value = d.default_limit_buffer_pct;
+            } catch (e) {
+                console.error('Failed to load form defaults:', e);
+            }
+        }
+        // Load form defaults on page init
+        applyFormDefaults();
+
+        // ========== POSITION / ORDER BOOK ==========
+        let booksInterval = null;
+
+        async function fetchBooks() {
+            try {
+                const res = await fetch('/api/books');
+                if (!res.ok) return;
+                const data = await res.json();
+                renderPositions(data.positions || []);
+                renderOrders(data.orders || []);
+            } catch (e) { /* silently skip */ }
+        }
+
+        function renderPositions(positions) {
+            const openBody = document.querySelector('#positionsTable tbody');
+            const closedBody = document.querySelector('#closedPositionsTable tbody');
+
+            const openPos = positions.filter(p => parseInt(p.qty) !== 0);
+            const closedPos = positions.filter(p => parseInt(p.qty) === 0);
+
+            let openHTML = '';
+            if (openPos.length === 0) {
+                openHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">No open positions</td></tr>';
+            } else {
+                openPos.forEach(p => {
+                    const pnl = parseFloat(p.pnl || 0);
+                    const pnlColor = pnl >= 0 ? 'var(--secondary)' : 'var(--danger)';
+                    const pnlStr = pnl >= 0 ? `+${pnl.toFixed(2)}` : pnl.toFixed(2);
+                    openHTML += `
+                    <tr>
+                        <td style="font-weight:600">${p.symbol}</td>
+                        <td>${p.exchange || '-'}</td>
+                        <td>${p.product || '-'}</td>
+                        <td>${p.qty}</td>
+                        <td>${parseFloat(p.avg_price || 0).toFixed(2)}</td>
+                        <td style="color:${pnlColor};font-weight:600">${pnlStr}</td>
+                        <td><button class="btn btn-outline" style="padding:2px 6px; font-size:0.75rem; border-color:var(--warning); color:var(--warning)" onclick="squareOffFromPositions('${p.symbol}', ${Math.abs(p.qty)})">Square Off</button></td>
+                    </tr>`;
+                });
+            }
+            openBody.innerHTML = openHTML;
+
+            let closedHTML = '';
+            if (closedPos.length === 0) {
+                closedHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No closed positions today</td></tr>';
+            } else {
+                closedPos.forEach(p => {
+                    const pnl = parseFloat(p.pnl || 0);
+                    const pnlColor = pnl >= 0 ? 'var(--secondary)' : 'var(--danger)';
+                    const pnlStr = pnl >= 0 ? `+${pnl.toFixed(2)}` : pnl.toFixed(2);
+                    closedHTML += `
+                    <tr>
+                        <td style="font-weight:600; color:var(--text-muted)">${p.symbol}</td>
+                        <td style="color:var(--text-muted)">${p.exchange || '-'}</td>
+                        <td style="color:var(--text-muted)">${p.product || '-'}</td>
+                        <td style="color:var(--text-muted)">${p.qty}</td>
+                        <td style="color:var(--text-muted)">${parseFloat(p.avg_price || 0).toFixed(2)}</td>
+                        <td style="color:${pnlColor};font-weight:600">${pnlStr}</td>
+                    </tr>`;
+                });
+            }
+            closedBody.innerHTML = closedHTML;
+        }
+
+        function renderOrders(orders) {
+            const tbody = document.querySelector('#ordersTable tbody');
+            tbody.innerHTML = '';
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text-muted)">No orders today</td></tr>';
+                return;
+            }
+            orders.forEach(o => {
+                const st = (o.status || '').toLowerCase();
+                let statusColor = 'var(--text-muted)';
+                if (st.includes('complete') || st.includes('filled')) statusColor = 'var(--secondary)';
+                else if (st.includes('rejected')) statusColor = 'var(--danger)';
+                else if (st.includes('cancelled')) statusColor = 'var(--warning)';
+                else if (st.includes('open') || st.includes('pending')) statusColor = 'var(--primary)';
+                const actionColor = (o.action || '').toUpperCase() === 'BUY' ? 'var(--secondary)' : 'var(--danger)';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="color:var(--text-muted);font-size:0.8rem">${o.order_id}</td>
+                    <td style="font-weight:600">${o.symbol}</td>
+                    <td style="color:${actionColor};font-weight:600">${(o.action || '').toUpperCase()}</td>
+                    <td>${o.order_type || '-'}</td>
+                    <td>${o.product || '-'}</td>
+                    <td>${o.qty}</td>
+                    <td>${o.filled_qty}</td>
+                    <td>${parseFloat(o.price || 0).toFixed(2)}</td>
+                    <td>${parseFloat(o.avg_price || 0).toFixed(2)}</td>
+                    <td style="color:${statusColor};font-weight:500">${o.status}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function startBooksPolling() {
+            if (!booksInterval) {
+                fetchBooks();
+                booksInterval = setInterval(fetchBooks, 15000);
+            }
+        }
+
+        function stopBooksPolling() {
+            if (booksInterval) {
+                clearInterval(booksInterval);
+                booksInterval = null;
+            }
+        }
+
+        // ========== SETTINGS ==========
+        const settingsFields = [
+            { id: 'set_poll_interval_seconds', key: 'poll_interval_seconds', type: 'number' },
+            { id: 'set_order_fill_timeout_seconds', key: 'order_fill_timeout_seconds', type: 'number' },
+            { id: 'set_sl_market_chase_delay_seconds', key: 'sl_market_chase_delay_seconds', type: 'number' },
+            { id: 'set_stale_data_alert_delay', key: 'stale_data_alert_delay', type: 'number' },
+            { id: 'set_default_limit_buffer_pct', key: 'default_limit_buffer_pct', type: 'float' },
+            { id: 'set_max_log_lines', key: 'max_log_lines', type: 'number' },
+            { id: 'set_default_nfo_lot_size', key: 'default_nfo_lot_size', type: 'number' },
+            { id: 'set_state_file_path', key: 'state_file_path', type: 'string' },
+            { id: 'set_execution_log_path', key: 'execution_log_path', type: 'string' },
+            { id: 'set_symbol_db_path', key: 'symbol_db_path', type: 'string' },
+            { id: 'set_openalgo_api_key', key: 'openalgo_api_key', type: 'string' },
+            { id: 'set_openalgo_host', key: 'openalgo_host', type: 'string' },
+            { id: 'set_openalgo_ws_url', key: 'openalgo_ws_url', type: 'string' },
+            { id: 'set_zmq_address', key: 'zmq_address', type: 'string' },
+        ];
+
+        async function loadSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                if (!res.ok) return;
+                const data = await res.json();
+                const s = data.settings;
+                settingsFields.forEach(f => {
+                    const el = document.getElementById(f.id);
+                    if (el && s[f.key] !== undefined) {
+                        el.value = s[f.key];
+                    }
+                });
+            } catch (e) {
+                showToast('Failed to load settings', 'error');
+            }
+        }
+
+        async function saveSettings(event) {
+            event.preventDefault();
+            const payload = {};
+            settingsFields.forEach(f => {
+                const el = document.getElementById(f.id);
+                if (el && el.value !== '') {
+                    if (f.type === 'number') payload[f.key] = parseInt(el.value, 10);
+                    else if (f.type === 'float') payload[f.key] = parseFloat(el.value);
+                    else payload[f.key] = el.value;
+                }
+            });
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    showToast('⚙️ Settings saved successfully!');
+                    // Force-refresh VWAP form defaults with new values
+                    const bufLong = document.getElementById('vwap_long_buffer_pct');
+                    const bufShort = document.getElementById('vwap_short_buffer_pct');
+                    if (payload.default_limit_buffer_pct !== undefined) {
+                        if (bufLong) bufLong.value = payload.default_limit_buffer_pct;
+                        if (bufShort) bufShort.value = payload.default_limit_buffer_pct;
+                    }
+                } else {
+                    showToast('Failed to save settings', 'error');
+                }
+            } catch (e) {
+                showToast('Failed to save settings', 'error');
+            }
+        }
+
+        async function resetSettings() {
+            if (!confirm('Reset all settings to defaults? This cannot be undone.')) return;
+            try {
+                const res = await fetch('/api/settings/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (res.ok) {
+                    showToast('⚙️ Settings reset to defaults!');
+                    loadSettings();
+                }
+            } catch (e) {
+                showToast('Reset failed', 'error');
+            }
+        }
+
+        async function triggerCleanSlate() {
+            const pwd = prompt("EMERGENCY SHUTDOWN: Type 'CleanSlate' to execute.");
+            if (!pwd) return;
+
+            try {
+                const res = await fetch('/api/clean_slate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pwd })
+                });
+                if (res.ok) {
+                    showToast('🚨 CLEAN SLATE ACTIVATED! All operations halted.', 'error');
+                    fetchTrades();
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || 'Clean Slate failed.', 'error');
+                }
+            } catch (e) {
+                showToast('Unable to contact Server.', 'error');
+            }
+        }
+
+        let staleSince = null;
+        let beepPlayed = false;
+
+        async function fetchMetrics() {
+            try {
+                const res = await fetch('/api/dashboard_metrics');
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('m_realized').textContent = '₹' + data.realized_pnl;
+                    document.getElementById('m_total').textContent = '₹' + data.total_pnl;
+                    document.getElementById('m_total').style.color = data.total_pnl >= 0 ? 'var(--secondary)' : 'var(--danger)';
+
+                    if (data.stale_symbols_count > 10) {
+                        document.getElementById('botStatusDot').style.background = 'var(--danger)';
+                        document.getElementById('botStatusText').style.color = 'var(--danger)';
+
+                        const alarmDelaySecs = data.stale_data_alert_delay || 180;
+                        if (data.stale_seconds > alarmDelaySecs) {
+                            document.getElementById('botStatusText').textContent = '🚨 NET DOWN? (STALE)';
+                            if (!beepPlayed) {
+                                showToast('⚠️ CRITICAL: Stale Data Alarm Triggered! Your internet connection might be interrupted.', 'error');
+                                beepPlayed = true;
+                            }
+                        } else {
+                            document.getElementById('botStatusText').textContent = '! STALE DATA !';
+                        }
+
+                        // Backend Python Pygame handles the audio alert natively.
+                    } else {
+                        document.getElementById('botStatusText').textContent = 'data ok';
+                        document.getElementById('botStatusDot').style.background = 'var(--secondary)';
+                        document.getElementById('botStatusText').style.color = 'var(--secondary)';
+
+                        beepPlayed = false;
+                    }
+                }
+            } catch (e) { }
+        }
+        setInterval(fetchMetrics, 3000);
+        fetchMetrics();
+        // Dynamic LTP Tracking logic seamlessly across ALL Symbol Inputs globally
+        document.querySelectorAll('input[name="symbol"]').forEach(inp => {
+            const label = inp.closest('.form-group')?.querySelector('label');
+            if (label) {
+                const span = document.createElement('span');
+                span.style.cssText = "float:right; color:var(--secondary); font-weight:bold; font-size:0.85rem;";
+                label.appendChild(span);
+
+                inp.addEventListener('input', (e) => {
+                    const val = e.target.value.trim().toUpperCase();
+                    if (!val) { span.innerText = ''; return; }
+                    if (!inp._ltpPoller) {
+                        inp._ltpPoller = async () => {
+                            if (!inp.value) { span.innerText = ''; return; }
+                            try {
+                                const symFetch = inp.value.trim().toUpperCase();
+                                const _ltpForm = inp.closest('form');
+                                const _ltpExchSel = _ltpForm ? _ltpForm.querySelector('select[name="exchange"]') : null;
+                                const _ltpExch = _ltpExchSel ? _ltpExchSel.value : 'NSE';
+                                const r = await fetch(`/api/ltp/${symFetch}?exchange=${_ltpExch}`);
+                                const d = await r.json();
+                                if (d.ltp > 0 && inp.value.trim().toUpperCase() === symFetch) {
+                                    span.innerText = `₹${d.ltp}`;
+                                }
+                            } catch (e) { }
+                            setTimeout(inp._ltpPoller, 1500);
+                        };
+                        inp._ltpPoller();
+                    }
+                });
+            }
+        });
+
+        // ========== NFO OPTIONS LOT MANAGEMENT ==========
+        function injectNFOFields() {
+            const forms = [
+                { id: 'form-basic-long', qtyName: 'qty', qtyLabel: 'Quantity' },
+                { id: 'form-short-mis', qtyName: 'sell_qty', qtyLabel: 'Sell Quantity' },
+                { id: 'form-vwap-long', qtyName: 'qty', qtyLabel: 'Quantity' },
+                { id: 'form-vwap-short', qtyName: 'qty', qtyLabel: 'Quantity' },
+                { id: 'form-bracket-acc', qtyName: 'qty', qtyLabel: 'Buy Quantity per hit' },
+            ];
+
+            forms.forEach(cfg => {
+                const form = document.getElementById(cfg.id);
+                if (!form) return;
+
+                // Add NRML option to product select if missing
+                const productSelect = form.querySelector('select[name="product"]');
+                if (productSelect && !productSelect.querySelector('option[value="NRML"]')) {
+                    const opt = document.createElement('option');
+                    opt.value = 'NRML';
+                    opt.textContent = 'NRML (Normal)';
+                    productSelect.appendChild(opt);
+                }
+
+                // Find qty input and inject lot_size field after its form-group
+                const qtyInput = form.querySelector(`input[name="${cfg.qtyName}"]`);
+                if (!qtyInput) return;
+                const qtyGroup = qtyInput.closest('.form-group');
+
+                // Create lot_size field group (hidden by default)
+                const lotGroup = document.createElement('div');
+                lotGroup.className = 'form-group nfo-lot-group';
+                lotGroup.style.display = 'none';
+                lotGroup.innerHTML = `
+                    <label>Lot Size</label>
+                    <input type="number" class="form-control" name="lot_size" value="65" min="1">
+                    <small style="color:var(--text-muted);font-size:0.75rem;">NIFTY=65, BANKNIFTY=15, FINNIFTY=25</small>
+                `;
+                qtyGroup.parentNode.insertBefore(lotGroup, qtyGroup.nextSibling);
+
+                // Create computed qty display (hidden by default)
+                const computedGroup = document.createElement('div');
+                computedGroup.className = 'form-group nfo-computed-qty';
+                computedGroup.style.display = 'none';
+                computedGroup.innerHTML = `
+                    <label style="color:var(--primary)">Total Quantity</label>
+                    <div class="form-control" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);cursor:default;font-weight:700;color:var(--primary);">0</div>
+                    <small style="color:var(--primary);font-size:0.75rem;">= Lots × Lot Size (sent to broker)</small>
+                `;
+                lotGroup.parentNode.insertBefore(computedGroup, lotGroup.nextSibling);
+
+                // Live compute total qty display
+                const updateComputed = () => {
+                    const lots = parseInt(qtyInput.value) || 0;
+                    const lotSize = parseInt(lotGroup.querySelector('input[name="lot_size"]').value) || 65;
+                    const total = lots * lotSize;
+                    computedGroup.querySelector('.form-control').textContent = total > 0 ? total.toLocaleString() : '0';
+                };
+                qtyInput.addEventListener('input', updateComputed);
+                lotGroup.querySelector('input[name="lot_size"]').addEventListener('input', updateComputed);
+
+                // Store original label for toggling
+                const label = qtyGroup.querySelector('label');
+                const originalLabel = cfg.qtyLabel;
+
+                // Exchange change listener
+                const exchangeSelect = form.querySelector('select[name="exchange"]');
+                if (exchangeSelect) {
+                    exchangeSelect.addEventListener('change', function () {
+                        const isOptions = ['NFO', 'BFO', 'MCX'].includes(this.value);
+                        lotGroup.style.display = isOptions ? '' : 'none';
+                        computedGroup.style.display = isOptions ? '' : 'none';
+
+                        if (label) {
+                            const ltpSpan = label.querySelector('span');
+                            label.textContent = isOptions ? 'Number of Lots' : originalLabel;
+                            if (ltpSpan) label.appendChild(ltpSpan);
+                        }
+
+                        // Switch product default for derivatives + add NRML option
+                        if (productSelect && isOptions) {
+                            // Add NRML if not present
+                            if (!productSelect.querySelector('option[value="NRML"]')) {
+                                const nrmlOpt = document.createElement('option');
+                                nrmlOpt.value = 'NRML';
+                                nrmlOpt.textContent = 'NRML (Normal/Overnight)';
+                                productSelect.appendChild(nrmlOpt);
+                            }
+                            productSelect.value = 'NRML';
+                        } else if (productSelect) {
+                            // Remove NRML when switching back to equity
+                            const nrmlOpt = productSelect.querySelector('option[value="NRML"]');
+                            if (nrmlOpt) nrmlOpt.remove();
+                            if (productSelect.value === 'NRML') productSelect.value = 'MIS';
+                        }
+
+                        if (isOptions) updateComputed();
+                    });
+                }
+            });
+        }
+        injectNFOFields();
+
+        // Time-Bound SL checkbox toggle
+        document.getElementById('bl_time_sl_enabled')?.addEventListener('change', function () {
+            const fields = document.getElementById('bl_time_sl_fields');
+            if (fields) fields.style.display = this.checked ? '' : 'none';
+        });
+
+        // Load default lot size from settings
+        async function applyNFODefaults() {
+            try {
+                const res = await fetch('/api/settings/form_defaults');
+                if (!res.ok) return;
+                const d = await res.json();
+                if (d.default_nfo_lot_size) {
+                    document.querySelectorAll('.nfo-lot-group input[name="lot_size"]').forEach(el => {
+                        el.value = d.default_nfo_lot_size;
+                    });
+                }
+            } catch (e) { }
+        }
+        applyNFODefaults();
+
+        // ========== DEBUG WS FUNCTIONS ==========
+        async function debugSubscribe() {
+            const sym = document.getElementById('debug_sub_symbol').value.trim().toUpperCase();
+            const exchange = document.getElementById('debug_sub_exchange').value;
+            const resultDiv = document.getElementById('debugSubResult');
+
+            if (!sym) {
+                showToast('Enter a symbol to test subscription', 'error');
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = 'rgba(59,130,246,0.1)';
+            resultDiv.style.border = '1px solid rgba(59,130,246,0.3)';
+            resultDiv.style.color = 'var(--text-main)';
+            resultDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Subscribing <strong>${exchange}:${sym}</strong>...`;
+
+            try {
+                const res = await fetch('/api/debug/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol: sym, exchange: exchange })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    resultDiv.style.background = 'rgba(16,185,129,0.1)';
+                    resultDiv.style.border = '1px solid rgba(16,185,129,0.3)';
+                    const ltpInfo = data.current_ltp > 0
+                        ? `<br><strong style="color:var(--secondary)">Current LTP: ₹${data.current_ltp}</strong> (already cached!)`
+                        : `<br><span style="color:var(--warning)">No cached LTP yet — waiting for first tick...</span>`;
+                    resultDiv.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--secondary)"></i> ${data.message}${ltpInfo}<br><small style="color:var(--text-muted)">${data.note}</small>`;
+
+                    // Auto-poll for first tick (check every 2s for 30s)
+                    let checks = 0;
+                    const ticker = setInterval(async () => {
+                        checks++;
+                        if (checks > 15) { clearInterval(ticker); return; }
+                        try {
+                            const r = await fetch(`/api/ltp/${sym}?exchange=${exchange}`);
+                            const d = await r.json();
+                            if (d.ltp > 0) {
+                                resultDiv.style.background = 'rgba(16,185,129,0.15)';
+                                resultDiv.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--secondary)"></i> <strong style="color:var(--secondary)">✅ CONFIRMED: ${exchange}:${sym} → ₹${d.ltp}</strong><br><small style="color:var(--text-muted)">WebSocket data is flowing correctly!</small>`;
+                                clearInterval(ticker);
+                                fetchDebugLtp();
+                            }
+                        } catch (e) { }
+                    }, 2000);
+                } else {
+                    resultDiv.style.background = 'rgba(239,68,68,0.1)';
+                    resultDiv.style.border = '1px solid rgba(239,68,68,0.3)';
+                    resultDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation" style="color:var(--danger)"></i> <strong>Failed:</strong> ${data.error || 'Unknown error'}`;
+                }
+            } catch (e) {
+                resultDiv.style.background = 'rgba(239,68,68,0.1)';
+                resultDiv.style.border = '1px solid rgba(239,68,68,0.3)';
+                resultDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation" style="color:var(--danger)"></i> Cannot reach server: ${e.message}`;
+            }
+        }
+
+        async function fetchDebugLtp() {
+            const filter = (document.getElementById('debugLtpFilter')?.value || '').trim().toUpperCase();
+            const filterParam = filter ? `?q=${filter}` : '';
+            try {
+                const res = await fetch(`/api/debug/ltp${filterParam}`);
+                if (!res.ok) return;
+                const data = await res.json();
+
+                document.getElementById('debugLtpCount').textContent = `${data.count} symbol(s) in LTP cache${filter ? ` matching "${filter}"` : ''}`;
+
+                const tbody = document.querySelector('#debugLtpTable tbody');
+                if (data.entries.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted)">No LTP data cached' + (filter ? ` for "${filter}"` : '') + '</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.entries.map(e => {
+                    const age = e.last_update_age_sec;
+                    let statusColor, statusText;
+                    if (age < 0) { statusColor = 'var(--text-muted)'; statusText = 'Never'; }
+                    else if (age < 30) { statusColor = 'var(--secondary)'; statusText = '🟢 Live'; }
+                    else if (age < 120) { statusColor = 'var(--warning)'; statusText = '🟡 Slow'; }
+                    else { statusColor = 'var(--danger)'; statusText = '🔴 Stale'; }
+
+                    return `<tr>
+                        <td style="font-weight:600;font-family:monospace;font-size:0.85rem;">${e.symbol}</td>
+                        <td style="color:var(--secondary);font-weight:700;">₹${e.ltp}</td>
+                        <td style="color:var(--text-muted)">${age >= 0 ? age + 's ago' : '-'}</td>
+                        <td style="color:${statusColor};font-weight:600;font-size:0.85rem;">${statusText}</td>
+                    </tr>`;
+                }).join('');
+            } catch (e) {
+                document.getElementById('debugLtpCount').textContent = 'Error fetching LTP data';
+            }
+        }
+
+        // Filter input on Enter key
+        document.getElementById('debugLtpFilter')?.addEventListener('keyup', function (e) {
+            if (e.key === 'Enter') fetchDebugLtp();
+        });
+
+        // ========== ALERTS SYSTEM ==========
+        let alertsInterval = null;
+        let _lastTriggeredCount = 0;
+
+        function toggleAlertTypeFields() {
+            const t = document.getElementById('alert_type').value;
+            document.getElementById('alert_target_group').style.display = t === 'price_crossover' ? '' : 'none';
+            document.getElementById('alert_timeframe_group').style.display = t === 'vwap_crossover' ? '' : 'none';
+        }
+
+        async function createAlert(e) {
+            e.preventDefault();
+            const form = e.target;
+            const fd = new FormData(form);
+            const p = Object.fromEntries(fd.entries());
+            if (!p.symbol) { showToast('Symbol is required', 'error'); return; }
+            if (p.alert_type === 'price_crossover' && (!p.target_price || parseFloat(p.target_price) <= 0)) {
+                showToast('Target price is required for price alerts', 'error'); return;
+            }
+            try {
+                const res = await fetch('/api/alerts', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(p)
+                });
+                if (res.ok) { showToast('🔔 Alert created successfully!'); form.reset(); toggleAlertTypeFields(); fetchAlerts(); }
+                else { const d = await res.json(); showToast(d.error || 'Failed', 'error'); }
+            } catch (e) { showToast('Server offline', 'error'); }
+        }
+
+        async function fetchAlerts() {
+            try {
+                const res = await fetch('/api/alerts');
+                if (!res.ok) return;
+                const data = await res.json();
+                renderAlerts(data.alerts || []);
+                handleTriggeredNotifications(data.triggered || []);
+                updateAlertsBadge(data.alerts || []);
+            } catch (e) { }
+        }
+
+        function updateAlertsBadge(alerts) {
+            const active = alerts.filter(a => a.status === 'active' && a.enabled).length;
+            const badge = document.getElementById('alertsBadgeCount');
+            if (badge) {
+                if (active > 0) { badge.style.display = ''; badge.textContent = active; }
+                else { badge.style.display = 'none'; }
+            }
+        }
+
+        function playAlertSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                function beep(startTime) {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = 880;
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+                    osc.start(startTime); osc.stop(startTime + 0.4);
+                }
+                beep(ctx.currentTime);
+                beep(ctx.currentTime + 0.5);
+            } catch (e) { console.warn('Audio not available'); }
+        }
+
+        function showFloatingAlert(msg) {
+            const container = document.getElementById('sidebarAlertNotifs');
+            const el = document.createElement('div');
+            el.style.cssText = 'pointer-events:auto;background:linear-gradient(135deg,rgba(245,158,11,0.95),rgba(239,68,68,0.9));color:#fff;padding:14px 20px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.4);backdrop-filter:blur(10px);max-width:380px;animation:slideIn 0.4s ease;border:1px solid rgba(255,255,255,0.2);';
+            el.innerHTML = '<i class="fa-solid fa-bell" style="margin-right:8px;"></i>' + msg;
+            container.appendChild(el);
+            setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(100px)'; el.style.transition = 'all 0.5s ease'; setTimeout(() => el.remove(), 500); }, 8000);
+        }
+
+        function handleTriggeredNotifications(triggered) {
+            if (triggered.length > _lastTriggeredCount && _lastTriggeredCount > 0) {
+                const newAlerts = triggered.slice(0, triggered.length - _lastTriggeredCount);
+                newAlerts.forEach(t => {
+                    playAlertSound();
+                    showFloatingAlert(t.message);
+                });
+            }
+            _lastTriggeredCount = triggered.length;
+        }
+
+        function renderAlerts(alerts) {
+            const tbody = document.querySelector('#alertsTable tbody');
+
+            // Capture currently checked alerts to preserve selection across polling
+            const checkedIds = new Set(Array.from(document.querySelectorAll('.alert-checkbox:checked')).map(cb => cb.dataset.alertId));
+            const selectAllState = document.getElementById('alertSelectAll')?.checked;
+
+            if (!alerts || alerts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text-muted)">No alerts configured. Create one above.</td></tr>';
+                updateBulkBar();
+                return;
+            }
+            // Sort: triggered first (by triggered_at desc), then active
+            alerts.sort((a, b) => {
+                if (a.status === 'triggered' && b.status !== 'triggered') return -1;
+                if (b.status === 'triggered' && a.status !== 'triggered') return 1;
+                return (b.triggered_at || b.created_at || '').localeCompare(a.triggered_at || a.created_at || '');
+            });
+            tbody.innerHTML = '';
+            alerts.forEach(a => {
+                const isTriggered = a.status === 'triggered';
+                const isDisabled = !a.enabled;
+                const isChecked = checkedIds.has(a.id.toString()) ? 'checked' : '';
+
+                let statusHtml = '';
+                if (isTriggered) statusHtml = '<span class="badge" style="color:var(--warning);background:var(--warning-subtle);border:1px solid rgba(245,158,11,0.4);"><i class="fa-solid fa-bell"></i> Triggered</span>';
+                else if (isDisabled) statusHtml = '<span class="badge" style="color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border);">Disabled</span>';
+                else statusHtml = '<span class="badge running"><i class="fa-solid fa-satellite-dish"></i> Active</span>';
+
+                const typeLabel = a.alert_type === 'vwap_crossover' ? 'VWAP Cross' : 'Price Cross';
+                const targetInfo = a.alert_type === 'vwap_crossover' ? (a.timeframe || '3m') : ('₹' + (a.target_price || 0));
+                const dirLabel = a.direction === 'above' ? '↑ From Below' : a.direction === 'below' ? '↓ From Above' : '↕ Any';
+                const trigInfo = isTriggered ? `₹${a.triggered_price || 0}${a.triggered_vwap ? ' (VWAP:' + a.triggered_vwap + ')' : ''}<br><small>${new Date(a.triggered_at).toLocaleString('en-IN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: 'short' })}</small>` : '-';
+
+                let actions = '';
+                if (isTriggered) {
+                    actions = `<button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--primary);color:var(--primary)" onclick="resetAlert(${a.id})"><i class="fa-solid fa-rotate-left"></i> Reset</button>`;
+                } else {
+                    actions = `<button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:${a.enabled ? 'var(--warning)' : 'var(--secondary)'};color:${a.enabled ? 'var(--warning)' : 'var(--secondary)'}" onclick="toggleAlert(${a.id})">${a.enabled ? '<i class="fa-solid fa-pause"></i> Pause' : '<i class="fa-solid fa-play"></i> Enable'}</button>`;
+                }
+                actions += ` <button class="btn btn-outline" style="padding:3px 8px;font-size:0.72rem;border-color:var(--danger);color:var(--danger)" onclick="deleteAlert(${a.id})"><i class="fa-solid fa-trash"></i></button>`;
+
+                const tr = document.createElement('tr');
+                if (isTriggered) { tr.style.background = 'rgba(245,158,11,0.06)'; tr.style.borderLeft = '3px solid var(--warning)'; }
+                if (isDisabled) { tr.style.opacity = '0.5'; }
+                tr.innerHTML = `
+                    <td style="width:36px;"><input type="checkbox" class="alert-checkbox" data-alert-id="${a.id}" onchange="updateBulkBar()" style="width:16px;height:16px;accent-color:var(--primary);cursor:pointer;" ${isChecked}></td>
+                    <td>#${a.id}</td>
+                    <td style="font-weight:700;color:${isTriggered ? 'var(--warning)' : 'var(--text-heading)'}">${a.symbol}<br><small style="color:var(--text-muted);font-size:0.7rem;">${a.exchange || 'NSE'}</small></td>
+                    <td><span style="font-size:0.8rem;padding:3px 8px;border-radius:4px;background:${a.alert_type === 'vwap_crossover' ? 'var(--primary-subtle)' : 'var(--secondary-subtle)'};color:${a.alert_type === 'vwap_crossover' ? 'var(--primary)' : 'var(--secondary)'}">${typeLabel}</span></td>
+                    <td>${targetInfo}</td>
+                    <td>${dirLabel}</td>
+                    <td>${statusHtml}</td>
+                    <td style="font-size:0.85rem;">${trigInfo}</td>
+                    <td style="font-size:0.85rem;color:var(--text-muted);max-width:160px;">${a.note || '-'}</td>
+                    <td style="white-space:nowrap;">${actions}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Restore Select All checkbox state
+            const selectAll = document.getElementById('alertSelectAll');
+            if (selectAll) {
+                // If all rendered alerts are checked, check the parent. Otherwise rely on previous state if length matches checked.
+                const allCheckedNow = document.querySelectorAll('.alert-checkbox:checked').length;
+                selectAll.checked = (allCheckedNow > 0 && allCheckedNow === alerts.length) || selectAllState;
+            }
+            updateBulkBar();
+        }
+
+        async function toggleAlert(id) {
+            try { const r = await fetch(`/api/alerts/${id}/toggle`, { method: 'POST' }); if (r.ok) fetchAlerts(); } catch (e) { }
+        }
+        async function deleteAlert(id) {
+            if (!confirm('Delete this alert?')) return;
+            try { const r = await fetch(`/api/alerts/${id}`, { method: 'DELETE' }); if (r.ok) { showToast('Alert deleted'); fetchAlerts(); } } catch (e) { }
+        }
+        async function resetAlert(id) {
+            try { const r = await fetch(`/api/alerts/${id}/reset`, { method: 'POST' }); if (r.ok) { showToast('Alert reset to active'); fetchAlerts(); } } catch (e) { }
+        }
+
+        // ── Bulk Alert Selection System ──
+        function toggleAllAlertCheckboxes(masterCheckbox) {
+            const checkboxes = document.querySelectorAll('.alert-checkbox');
+            checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+            updateBulkBar();
+        }
+
+        function updateBulkBar() {
+            const checked = document.querySelectorAll('.alert-checkbox:checked');
+            const bar = document.getElementById('alertsBulkBar');
+            const count = document.getElementById('alertsBulkCount');
+            if (bar) {
+                if (checked.length > 0) {
+                    bar.style.display = 'flex';
+                    if (count) count.textContent = checked.length;
+                } else {
+                    bar.style.display = 'none';
+                }
+            }
+        }
+
+        function clearAlertSelections() {
+            document.querySelectorAll('.alert-checkbox').forEach(cb => cb.checked = false);
+            const selectAll = document.getElementById('alertSelectAll');
+            if (selectAll) selectAll.checked = false;
+            updateBulkBar();
+        }
+
+        async function bulkDeleteAlerts() {
+            const checked = document.querySelectorAll('.alert-checkbox:checked');
+            const ids = Array.from(checked).map(cb => parseInt(cb.dataset.alertId));
+            if (ids.length === 0) return;
+            if (!confirm(`Delete ${ids.length} selected alert(s)? This cannot be undone.`)) return;
+            try {
+                const res = await fetch('/api/alerts/bulk_delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids: ids })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    showToast(`🗑️ Deleted ${data.deleted_count} alert(s)`);
+                    fetchAlerts();
+                } else {
+                    showToast('Bulk delete failed', 'error');
+                }
+            } catch (e) {
+                showToast('Server offline', 'error');
+            }
+        }
+
+        function startAlertsPolling() {
+            if (!alertsInterval) { fetchAlerts(); alertsInterval = setInterval(fetchAlerts, 5000); }
+        }
+        function stopAlertsPolling() {
+            if (alertsInterval) { clearInterval(alertsInterval); alertsInterval = null; }
+        }
+
+        // Global alert polling (even when not on Alerts tab, for notifications)
+        setInterval(async () => {
+            try {
+                const r = await fetch('/api/alerts/triggered');
+                if (r.ok) { const d = await r.json(); handleTriggeredNotifications(d.triggered || []); }
+            } catch (e) { }
+        }, 10000);
+
+        // ========== THEME SYSTEM ==========
+        function getPreferredTheme() {
+            const stored = localStorage.getItem('oatj-theme');
+            if (stored) return stored;
+            // Default to dark matching the original design
+            return 'dark';
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('oatj-theme', theme);
+            // Update toggle button
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            if (icon && label) {
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-moon';
+                    label.textContent = 'Light Mode';
+                } else {
+                    icon.className = 'fa-solid fa-sun';
+                    label.textContent = 'Dark Mode';
+                }
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        // Apply saved theme on load
+        applyTheme(getPreferredTheme());
+
+    </script>
+</body>
+
+</html>
