@@ -1,0 +1,6 @@
+Flask
+pandas
+pyzmq
+openalgo
+requests
+pygame
